@@ -15,3 +15,6 @@
 
 # Ignore MDX files
 *.mdx
+
+# Local Obsidian vault settings
+**/.obsidian/**

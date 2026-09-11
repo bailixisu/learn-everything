@@ -43,8 +43,12 @@
       @apply border-border;
     }
 
+    figure {
+      @apply my-10;
+    }
+
     img {
-      @apply border-border mx-auto border;
+      @apply border-border mx-auto rounded-xl border shadow-sm;
     }
 
     img[role="button"] {
@@ -56,7 +60,11 @@
     }
 
     figcaption {
-      @apply opacity-75;
+      @apply text-muted-foreground mt-3 text-center text-sm leading-6;
+    }
+
+    mark {
+      @apply bg-accent/15 text-foreground rounded-sm px-1 py-0.5;
     }
 
     table {
