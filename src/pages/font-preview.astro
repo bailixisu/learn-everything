@@ -1,0 +1,415 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+
+const schemes = [
+  {
+    id: "system",
+    name: "当前方案",
+    label: "系统黑体",
+    description: "苹方优先，简洁、稳定、加载最快",
+  },
+  {
+    id: "tech",
+    name: "方案一",
+    label: "思源黑体",
+    description: "现代科技感，标题和正文统一清晰",
+  },
+  {
+    id: "editorial",
+    name: "方案二 · 推荐",
+    label: "黑体标题 + 宋体正文",
+    description: "像技术杂志，适合图文并茂的长文章",
+  },
+  {
+    id: "garden",
+    name: "方案三",
+    label: "全站霞鹜文楷",
+    description: "温暖、有个人笔记和数字花园气质",
+  },
+  {
+    id: "title-wenkai",
+    name: "方案四",
+    label: "文楷标题 + 黑体正文",
+    description: "标题有个性，正文保持现代和清晰",
+  },
+  {
+    id: "body-wenkai",
+    name: "方案五",
+    label: "黑体标题 + 文楷正文",
+    description: "结构醒目，阅读过程更像个人手记",
+  },
+];
+---
+
+<Layout
+  title="字体方案预览 · Learn Everything"
+  description="比较 Learn Everything 博客的中文字体组合。"
+>
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  <link
+    slot="head"
+    rel="preconnect"
+    href="https://cdn.jsdelivr.net"
+    crossorigin="anonymous"
+  />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fontsource-variable/noto-sans-sc@5.3.0/index.css"
+  />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fontsource-variable/noto-serif-sc@5.3.0/index.css"
+  />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-regular.css"
+  />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fontsource-variable/jetbrains-mono@5.3.0/index.css"
+  />
+
+  <Header />
+  <main id="main-content" class="app-layout py-10 sm:py-14">
+    <header class="border-border mb-8 border-b pb-8">
+      <p
+        class="text-accent mb-3 text-sm font-semibold tracking-[0.2em] uppercase"
+      >
+        Typography Lab
+      </p>
+      <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
+        中文字体方案预览
+      </h1>
+      <p class="text-muted-foreground mt-4 max-w-2xl text-lg leading-8">
+        选择一个方案，下方会使用相同内容展示标题、正文、引用、强调和代码。这个页面不会改变博客当前字体。
+      </p>
+    </header>
+
+    <section aria-labelledby="scheme-title">
+      <h2 id="scheme-title" class="mb-4 text-xl font-semibold">选择方案</h2>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          schemes.map((scheme, index) => (
+            <button
+              type="button"
+              class:list={[
+                "font-option border-border hover:border-accent rounded-xl border p-4 text-left transition",
+                { selected: index === 2 },
+              ]}
+              data-scheme={scheme.id}
+              aria-pressed={index === 2 ? "true" : "false"}
+            >
+              <span class="text-accent block text-xs font-semibold tracking-wider uppercase">
+                {scheme.name}
+              </span>
+              <strong class="mt-1 block text-lg">{scheme.label}</strong>
+              <span class="text-muted-foreground mt-1 block text-sm leading-6">
+                {scheme.description}
+              </span>
+            </button>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="mt-10" aria-labelledby="preview-title">
+      <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <h2 id="preview-title" class="text-xl font-semibold">实际文章效果</h2>
+        <span
+          id="active-scheme"
+          class="bg-accent/10 text-accent rounded-full px-3 py-1 text-sm font-medium"
+        >
+          方案二 · 黑体标题 + 宋体正文
+        </span>
+      </div>
+
+      <article
+        id="font-stage"
+        data-font-scheme="editorial"
+        class="border-border bg-background overflow-hidden rounded-2xl border shadow-sm"
+      >
+        <div class="border-border border-b px-6 py-8 sm:px-10 sm:py-12">
+          <p class="preview-kicker">AGENT · ARCHITECTURE</p>
+          <h1 class="preview-heading">
+            ReAct、Plan-and-Execute 与 Multi-Agent
+          </h1>
+          <p class="preview-description">
+            从反馈控制、显式规划和组织协作三个维度，理解 Agent 架构的内核差异。
+          </p>
+          <div class="preview-meta">
+            <span>2026 年 9 月 11 日</span>
+            <span>·</span>
+            <span>约 12 分钟阅读</span>
+          </div>
+        </div>
+
+        <div class="preview-body px-6 py-8 sm:px-10 sm:py-12">
+          <p class="preview-lead">
+            如果一个 Agent
+            已经能够使用工具，为什么还需要规划器和多个协作角色？关键不在于组件数量，而在于系统究竟要解决哪一种失败。
+          </p>
+
+          <p>
+            <strong>ReAct 优化适应性</strong>，让模型根据最新观察决定下一步；
+            <strong>Plan-and-Execute 优化全局结构</strong
+            >，避免长任务遗漏关键阶段； Multi-Agent
+            则负责拆分上下文、权限与专业责任。
+          </p>
+
+          <blockquote>
+            好的架构不是使用最多的 Agent，而是用最小复杂度解决真实问题。
+          </blockquote>
+
+          <h2>核心问题：什么时候增加复杂度？</h2>
+          <p>
+            应该从失败模式出发，而不是从流行术语出发。当环境变化频繁时缩短反馈环；当任务容易漏步骤时引入显式计划；只有出现真实的分工、隔离或并行需求时，才需要多个
+            Agent。
+          </p>
+
+          <ul>
+            <li>环境反馈是否会改变下一步？</li>
+            <li>是否存在清晰、可验证的阶段？</li>
+            <li>是否真的需要独立上下文或权限？</li>
+          </ul>
+
+          <p>
+            其中最值得记住的是：<mark>复杂度必须通过可测量的收益来证明</mark
+            >，而不是通过更复杂的架构图来证明。
+          </p>
+
+          <pre><code>if environment_is_dynamic:
+    use("ReAct")
+elif long_task_misses_steps:
+    use("Plan-and-Execute")
+else:
+    keep_it_simple()</code></pre>
+        </div>
+      </article>
+    </section>
+
+    <section class="mt-12" aria-labelledby="quick-compare-title">
+      <h2 id="quick-compare-title" class="mb-4 text-xl font-semibold">
+        标题快速对比
+      </h2>
+      <div class="space-y-3">
+        {
+          schemes.map(scheme => (
+            <div
+              class={`mini-sample border-border rounded-xl border p-5 scheme-${scheme.id}`}
+            >
+              <span class="text-muted-foreground text-xs">{scheme.label}</span>
+              <p class="mini-heading mt-2">Workflow 管过程，Skill 管能力</p>
+              <p class="mini-body mt-2">
+                一个回答“什么时候做什么”，另一个回答“这件事应该怎样做好”。
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  const schemeNames: Record<string, string> = {
+    system: "当前方案 · 系统黑体",
+    tech: "方案一 · 思源黑体",
+    editorial: "方案二 · 黑体标题 + 宋体正文",
+    garden: "方案三 · 全站霞鹜文楷",
+    "title-wenkai": "方案四 · 文楷标题 + 黑体正文",
+    "body-wenkai": "方案五 · 黑体标题 + 文楷正文",
+  };
+
+  function setupFontPreview() {
+    const stage = document.querySelector<HTMLElement>("#font-stage");
+    const label = document.querySelector<HTMLElement>("#active-scheme");
+    const options =
+      document.querySelectorAll<HTMLButtonElement>(".font-option");
+    if (!stage || !label) return;
+
+    options.forEach(option => {
+      option.addEventListener("click", () => {
+        const scheme = option.dataset.scheme ?? "editorial";
+        stage.dataset.fontScheme = scheme;
+        label.textContent = schemeNames[scheme] ?? scheme;
+        options.forEach(item => {
+          const selected = item === option;
+          item.classList.toggle("selected", selected);
+          item.setAttribute("aria-pressed", String(selected));
+        });
+      });
+    });
+  }
+
+  setupFontPreview();
+  document.addEventListener("astro:after-swap", setupFontPreview);
+</script>
+
+<style>
+  .font-option.selected {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  #font-stage,
+  .mini-sample {
+    --preview-heading: "Noto Sans SC Variable", "PingFang SC", sans-serif;
+    --preview-body: "Noto Serif SC Variable", "Songti SC", serif;
+    --preview-code: "JetBrains Mono Variable", "SFMono-Regular", monospace;
+  }
+
+  [data-font-scheme="system"],
+  .scheme-system {
+    --preview-heading: "PingFang SC", "Microsoft YaHei", sans-serif;
+    --preview-body: "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+
+  [data-font-scheme="tech"],
+  .scheme-tech {
+    --preview-heading: "Noto Sans SC Variable", "PingFang SC", sans-serif;
+    --preview-body: "Noto Sans SC Variable", "PingFang SC", sans-serif;
+  }
+
+  [data-font-scheme="editorial"],
+  .scheme-editorial {
+    --preview-heading: "Noto Sans SC Variable", "PingFang SC", sans-serif;
+    --preview-body: "Noto Serif SC Variable", "Songti SC", serif;
+  }
+
+  [data-font-scheme="garden"],
+  .scheme-garden {
+    --preview-heading: "LXGW WenKai", "Kaiti SC", serif;
+    --preview-body: "LXGW WenKai", "Kaiti SC", serif;
+  }
+
+  [data-font-scheme="title-wenkai"],
+  .scheme-title-wenkai {
+    --preview-heading: "LXGW WenKai", "Kaiti SC", serif;
+    --preview-body: "Noto Sans SC Variable", "PingFang SC", sans-serif;
+  }
+
+  [data-font-scheme="body-wenkai"],
+  .scheme-body-wenkai {
+    --preview-heading: "Noto Sans SC Variable", "PingFang SC", sans-serif;
+    --preview-body: "LXGW WenKai", "Kaiti SC", serif;
+  }
+
+  .preview-kicker {
+    color: var(--accent);
+    font-family: var(--preview-heading);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+
+  .preview-heading,
+  .mini-heading {
+    font-family: var(--preview-heading);
+  }
+
+  .preview-heading {
+    max-width: 42rem;
+    margin-top: 1rem;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: -0.03em;
+  }
+
+  .preview-description {
+    max-width: 42rem;
+    margin-top: 1.25rem;
+    color: var(--muted-foreground);
+    font-family: var(--preview-body);
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+
+  .preview-meta {
+    display: flex;
+    gap: 0.65rem;
+    margin-top: 1.25rem;
+    color: var(--muted-foreground);
+    font-family: var(--preview-heading);
+    font-size: 0.85rem;
+  }
+
+  .preview-body,
+  .mini-body {
+    font-family: var(--preview-body);
+  }
+
+  .preview-body {
+    font-size: 1.05rem;
+    line-height: 1.95;
+  }
+
+  .preview-body > * + * {
+    margin-top: 1.4rem;
+  }
+
+  .preview-lead {
+    font-size: 1.18rem;
+    line-height: 1.9;
+  }
+
+  .preview-body h2 {
+    margin-top: 2.4rem;
+    font-family: var(--preview-heading);
+    font-size: 1.7rem;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .preview-body blockquote {
+    border-inline-start: 4px solid var(--accent);
+    padding: 0.75rem 0 0.75rem 1.25rem;
+    color: var(--muted-foreground);
+    font-size: 1.12rem;
+  }
+
+  .preview-body ul {
+    padding-inline-start: 1.4rem;
+    list-style: disc;
+  }
+
+  .preview-body li::marker {
+    color: var(--accent);
+  }
+
+  .preview-body mark {
+    border-radius: 0.2rem;
+    background: color-mix(in srgb, var(--accent) 18%, transparent);
+    padding: 0.1rem 0.25rem;
+    color: var(--foreground);
+  }
+
+  .preview-body pre {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: var(--muted);
+    padding: 1.25rem;
+    font-family: var(--preview-code);
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .mini-heading {
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+
+  .mini-body {
+    color: var(--muted-foreground);
+    line-height: 1.8;
+  }
+</style>
