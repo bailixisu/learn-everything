@@ -86,9 +86,9 @@ Transformer 采取另一种方案：
 - **Encoder**：读取源语言，产生上下文化表示；
 - **Decoder**：读取已经生成的目标 Token，并通过 Cross-Attention 查询 Encoder 输出。
 
-下图是依据原论文结构重新设计的概念图，不是论文原图复制。阅读时沿着左、右两条纵向数据流向上看。
+下图是依据原论文结构重新设计的概念图，不是论文原图复制。阅读时沿着左、右两条数据流由上至下看，横向的 K/V 路径表示 Encoder 输出进入 Decoder 的 Cross-Attention。
 
-![原始 Transformer Encoder–Decoder 的完整数据流](./01-transformer-foundations-assets/01-architecture.webp)
+![原始 Transformer Encoder–Decoder 的完整数据流](./01-transformer-foundations-assets/01-architecture.svg)
 
 _图 1：原始 Transformer 的概念重绘。左侧 Encoder 建立源序列表示；右侧 Decoder 使用因果 Self-Attention 和 Cross-Attention 逐步生成目标序列。依据 [Vaswani et al., 2017](https://arxiv.org/abs/1706.03762)。_
 
@@ -177,7 +177,7 @@ Scaled Dot-Product Attention 为：
 Attention(Q, K, V) = softmax(QKᵀ / √dₖ)V
 ```
 
-![一次 Self-Attention 从 Query-Key 匹配到 Value 聚合的过程](./01-transformer-foundations-assets/02-attention-mechanism.webp)
+![一次 Self-Attention 从 Query-Key 匹配到 Value 聚合的过程](./01-transformer-foundations-assets/02-attention-mechanism.svg)
 
 _图 2：一次注意力计算的可视化。权重仅用于解释流程，不是训练实验结果。真正模型会在多个 Head、多个 Layer 中学习不同关系。_
 
@@ -290,9 +290,9 @@ LayerNorm 控制单个样本特征维度上的统计尺度。原始 Transformer 
 
 今天说“一个 Transformer 模型”时，可能指完全不同的数据流。最常见的第一层分类是：Encoder-only、Decoder-only 和 Encoder–Decoder。
 
-![Transformer 三大架构家族与高效注意力变体地图](./01-transformer-foundations-assets/03-transformer-family-map.webp)
+![Transformer 三大架构家族与高效注意力变体地图](./01-transformer-foundations-assets/03-transformer-family-map.svg)
 
-_图 3：上半部分按模型数据流分类，下半部分按注意力优化目标分类。两条轴不能混为一谈：一个 Decoder-only 模型也可以同时采用局部注意力、GQA 或 FlashAttention。_
+_图 3：四列分别描述数据流、连接图、代数形式和执行方式。它们是可以组合的正交维度：一个 Decoder-only 模型也可以同时采用因果注意力、GQA 和 FlashAttention。_
 
 ### 1. Encoder-only
 
