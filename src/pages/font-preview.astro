@@ -40,6 +40,63 @@ const schemes = [
     label: "黑体标题 + 文楷正文",
     description: "结构醒目，阅读过程更像个人手记",
   },
+  {
+    id: "smiley",
+    name: "创意 A · 真斜体",
+    label: "得意黑标题 + 黑体正文",
+    description: "中文标题自然前倾，活泼、锐利、有未来感",
+  },
+  {
+    id: "xiaowei",
+    name: "创意 B",
+    label: "小薇体标题 + 宋体正文",
+    description: "纤细复古，像独立杂志和人文技术刊物",
+  },
+  {
+    id: "brush",
+    name: "创意 C",
+    label: "毛笔标题 + 黑体正文",
+    description: "书写感最强，适合栏目题签和重点标题",
+  },
+];
+
+const palettes = [
+  {
+    id: "midnight",
+    name: "午夜青绿",
+    note: "接近当前",
+    colors: ["#101715", "#e9f3ee", "#77c7af", "#31423b"],
+  },
+  {
+    id: "ink",
+    name: "宣纸青墨",
+    note: "自然耐读",
+    colors: ["#fbfaf5", "#252722", "#357266", "#e4e3dc"],
+  },
+  {
+    id: "indigo",
+    name: "雾紫靛蓝",
+    note: "科技创意",
+    colors: ["#f8f7ff", "#28243a", "#6d5bd0", "#ded9f3"],
+  },
+  {
+    id: "amber",
+    name: "琥珀纸张",
+    note: "温暖编辑感",
+    colors: ["#fff9ed", "#352c22", "#c06932", "#eadbc4"],
+  },
+  {
+    id: "rose",
+    name: "灰粉玫瑰",
+    note: "柔和克制",
+    colors: ["#fff8f8", "#382b30", "#b65f78", "#ecd8df"],
+  },
+  {
+    id: "ocean",
+    name: "海盐蓝",
+    note: "清爽理性",
+    colors: ["#f4fafc", "#172d36", "#167f98", "#cfe3e9"],
+  },
 ];
 ---
 
@@ -74,6 +131,16 @@ const schemes = [
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/@fontsource-variable/jetbrains-mono@5.3.0/index.css"
   />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fontsource/zcool-xiaowei@5.3.0/index.css"
+  />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@fontsource/ma-shan-zheng@5.3.1/index.css"
+  />
 
   <Header />
   <main id="main-content" class="app-layout py-10 sm:py-14">
@@ -87,7 +154,13 @@ const schemes = [
         中文字体方案预览
       </h1>
       <p class="text-muted-foreground mt-4 max-w-2xl text-lg leading-8">
-        选择一个方案，下方会使用相同内容展示标题、正文、引用、强调和代码。这个页面不会改变博客当前字体。
+        自由组合字体与配色，下方会使用相同内容展示标题、正文、引用、强调和代码。这个页面不会改变博客当前样式。
+      </p>
+      <p
+        class="border-accent/40 bg-accent/8 text-muted-foreground mt-5 max-w-2xl rounded-lg border px-4 py-3 text-sm leading-6"
+      >
+        中文很少有真正的 Italic
+        字形。“得意黑”是专门设计的中文斜体；文楷和毛笔体则通过书写动势营造类似效果，而不是机械倾斜。
       </p>
     </header>
 
@@ -118,23 +191,66 @@ const schemes = [
       </div>
     </section>
 
+    <section class="mt-10" aria-labelledby="palette-title">
+      <h2 id="palette-title" class="mb-4 text-xl font-semibold">选择配色</h2>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          palettes.map((palette, index) => (
+            <button
+              type="button"
+              class:list={[
+                "palette-option border-border hover:border-accent rounded-xl border p-4 text-left transition",
+                { selected: index === 0 },
+              ]}
+              data-palette={palette.id}
+              aria-pressed={index === 0 ? "true" : "false"}
+            >
+              <span class="flex items-start justify-between gap-3">
+                <strong>{palette.name}</strong>
+                <span class="text-muted-foreground text-xs">
+                  {palette.note}
+                </span>
+              </span>
+              <span class="mt-3 flex gap-2" aria-hidden="true">
+                {palette.colors.map(color => (
+                  <span
+                    class="palette-swatch"
+                    style={`--swatch-color: ${color}`}
+                  />
+                ))}
+              </span>
+            </button>
+          ))
+        }
+      </div>
+    </section>
+
     <section class="mt-10" aria-labelledby="preview-title">
       <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
         <h2 id="preview-title" class="text-xl font-semibold">实际文章效果</h2>
-        <span
-          id="active-scheme"
-          class="bg-accent/10 text-accent rounded-full px-3 py-1 text-sm font-medium"
-        >
-          方案二 · 黑体标题 + 宋体正文
-        </span>
+        <div class="flex flex-wrap gap-2">
+          <span
+            id="active-scheme"
+            class="bg-accent/10 text-accent rounded-full px-3 py-1 text-sm font-medium"
+          >
+            方案二 · 黑体标题 + 宋体正文
+          </span>
+          <span
+            id="active-palette"
+            class="border-border rounded-full border px-3 py-1 text-sm font-medium"
+          >
+            午夜青绿
+          </span>
+        </div>
       </div>
 
       <article
         id="font-stage"
         data-font-scheme="editorial"
-        class="border-border bg-background overflow-hidden rounded-2xl border shadow-sm"
+        data-palette="midnight"
+        class="overflow-hidden rounded-2xl border shadow-sm"
       >
-        <div class="border-border border-b px-6 py-8 sm:px-10 sm:py-12">
+        <div class="preview-header border-b px-6 py-8 sm:px-10 sm:py-12">
           <p class="preview-kicker">AGENT · ARCHITECTURE</p>
           <h1 class="preview-heading">
             ReAct、Plan-and-Execute 与 Multi-Agent
@@ -225,21 +341,49 @@ else:
     garden: "方案三 · 全站霞鹜文楷",
     "title-wenkai": "方案四 · 文楷标题 + 黑体正文",
     "body-wenkai": "方案五 · 黑体标题 + 文楷正文",
+    smiley: "创意 A · 得意黑斜体标题",
+    xiaowei: "创意 B · 小薇体标题",
+    brush: "创意 C · 毛笔标题",
+  };
+
+  const paletteNames: Record<string, string> = {
+    midnight: "午夜青绿",
+    ink: "宣纸青墨",
+    indigo: "雾紫靛蓝",
+    amber: "琥珀纸张",
+    rose: "灰粉玫瑰",
+    ocean: "海盐蓝",
   };
 
   function setupFontPreview() {
     const stage = document.querySelector<HTMLElement>("#font-stage");
-    const label = document.querySelector<HTMLElement>("#active-scheme");
-    const options =
+    const fontLabel = document.querySelector<HTMLElement>("#active-scheme");
+    const paletteLabel = document.querySelector<HTMLElement>("#active-palette");
+    const fontOptions =
       document.querySelectorAll<HTMLButtonElement>(".font-option");
-    if (!stage || !label) return;
+    const paletteOptions =
+      document.querySelectorAll<HTMLButtonElement>(".palette-option");
+    if (!stage || !fontLabel || !paletteLabel) return;
 
-    options.forEach(option => {
+    fontOptions.forEach(option => {
       option.addEventListener("click", () => {
         const scheme = option.dataset.scheme ?? "editorial";
         stage.dataset.fontScheme = scheme;
-        label.textContent = schemeNames[scheme] ?? scheme;
-        options.forEach(item => {
+        fontLabel.textContent = schemeNames[scheme] ?? scheme;
+        fontOptions.forEach(item => {
+          const selected = item === option;
+          item.classList.toggle("selected", selected);
+          item.setAttribute("aria-pressed", String(selected));
+        });
+      });
+    });
+
+    paletteOptions.forEach(option => {
+      option.addEventListener("click", () => {
+        const palette = option.dataset.palette ?? "midnight";
+        stage.dataset.palette = palette;
+        paletteLabel.textContent = paletteNames[palette] ?? palette;
+        paletteOptions.forEach(item => {
           const selected = item === option;
           item.classList.toggle("selected", selected);
           item.setAttribute("aria-pressed", String(selected));
@@ -253,10 +397,28 @@ else:
 </script>
 
 <style>
-  .font-option.selected {
+  @font-face {
+    font-family: "Smiley Sans";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("https://cdn.jsdelivr.net/npm/@fontpkg/smiley-sans@2.0.4/SmileySans-Oblique.otf.woff2")
+      format("woff2");
+  }
+
+  .font-option.selected,
+  .palette-option.selected {
     border-color: var(--accent);
     background: color-mix(in srgb, var(--accent) 8%, transparent);
     box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  .palette-swatch {
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 1px solid rgb(128 128 128 / 25%);
+    border-radius: 999px;
+    background: var(--swatch-color);
   }
 
   #font-stage,
@@ -264,6 +426,71 @@ else:
     --preview-heading: "Noto Sans SC Variable", "PingFang SC", sans-serif;
     --preview-body: "Noto Serif SC Variable", "Songti SC", serif;
     --preview-code: "JetBrains Mono Variable", "SFMono-Regular", monospace;
+  }
+
+  #font-stage {
+    --sample-bg: #101715;
+    --sample-text: #e9f3ee;
+    --sample-accent: #77c7af;
+    --sample-muted: #aabbb4;
+    --sample-border: #31423b;
+    --sample-code: #1e2b27;
+    border-color: var(--sample-border);
+    background: var(--sample-bg);
+    color: var(--sample-text);
+    transition:
+      color 180ms ease,
+      border-color 180ms ease,
+      background-color 180ms ease;
+  }
+
+  #font-stage[data-palette="ink"] {
+    --sample-bg: #fbfaf5;
+    --sample-text: #252722;
+    --sample-accent: #357266;
+    --sample-muted: #667069;
+    --sample-border: #e4e3dc;
+    --sample-code: #eef0eb;
+  }
+
+  #font-stage[data-palette="indigo"] {
+    --sample-bg: #f8f7ff;
+    --sample-text: #28243a;
+    --sample-accent: #6d5bd0;
+    --sample-muted: #6c6880;
+    --sample-border: #ded9f3;
+    --sample-code: #eeebfa;
+  }
+
+  #font-stage[data-palette="amber"] {
+    --sample-bg: #fff9ed;
+    --sample-text: #352c22;
+    --sample-accent: #c06932;
+    --sample-muted: #746556;
+    --sample-border: #eadbc4;
+    --sample-code: #f4ead9;
+  }
+
+  #font-stage[data-palette="rose"] {
+    --sample-bg: #fff8f8;
+    --sample-text: #382b30;
+    --sample-accent: #b65f78;
+    --sample-muted: #7a6870;
+    --sample-border: #ecd8df;
+    --sample-code: #f7e8ed;
+  }
+
+  #font-stage[data-palette="ocean"] {
+    --sample-bg: #f4fafc;
+    --sample-text: #172d36;
+    --sample-accent: #167f98;
+    --sample-muted: #5c727b;
+    --sample-border: #cfe3e9;
+    --sample-code: #e2f0f4;
+  }
+
+  .preview-header {
+    border-color: var(--sample-border);
   }
 
   [data-font-scheme="system"],
@@ -302,8 +529,26 @@ else:
     --preview-body: "LXGW WenKai", "Kaiti SC", serif;
   }
 
+  [data-font-scheme="smiley"],
+  .scheme-smiley {
+    --preview-heading: "Smiley Sans", "Noto Sans SC Variable", sans-serif;
+    --preview-body: "Noto Sans SC Variable", "PingFang SC", sans-serif;
+  }
+
+  [data-font-scheme="xiaowei"],
+  .scheme-xiaowei {
+    --preview-heading: "ZCOOL XiaoWei", "Noto Serif SC Variable", serif;
+    --preview-body: "Noto Serif SC Variable", "Songti SC", serif;
+  }
+
+  [data-font-scheme="brush"],
+  .scheme-brush {
+    --preview-heading: "Ma Shan Zheng", "Kaiti SC", cursive;
+    --preview-body: "Noto Sans SC Variable", "PingFang SC", sans-serif;
+  }
+
   .preview-kicker {
-    color: var(--accent);
+    color: var(--sample-accent);
     font-family: var(--preview-heading);
     font-size: 0.75rem;
     font-weight: 700;
@@ -327,7 +572,7 @@ else:
   .preview-description {
     max-width: 42rem;
     margin-top: 1.25rem;
-    color: var(--muted-foreground);
+    color: var(--sample-muted);
     font-family: var(--preview-body);
     font-size: 1.1rem;
     line-height: 1.8;
@@ -337,7 +582,7 @@ else:
     display: flex;
     gap: 0.65rem;
     margin-top: 1.25rem;
-    color: var(--muted-foreground);
+    color: var(--sample-muted);
     font-family: var(--preview-heading);
     font-size: 0.85rem;
   }
@@ -370,9 +615,9 @@ else:
   }
 
   .preview-body blockquote {
-    border-inline-start: 4px solid var(--accent);
+    border-inline-start: 4px solid var(--sample-accent);
     padding: 0.75rem 0 0.75rem 1.25rem;
-    color: var(--muted-foreground);
+    color: var(--sample-muted);
     font-size: 1.12rem;
   }
 
@@ -382,21 +627,21 @@ else:
   }
 
   .preview-body li::marker {
-    color: var(--accent);
+    color: var(--sample-accent);
   }
 
   .preview-body mark {
     border-radius: 0.2rem;
-    background: color-mix(in srgb, var(--accent) 18%, transparent);
+    background: color-mix(in srgb, var(--sample-accent) 22%, transparent);
     padding: 0.1rem 0.25rem;
-    color: var(--foreground);
+    color: var(--sample-text);
   }
 
   .preview-body pre {
     overflow-x: auto;
-    border: 1px solid var(--border);
+    border: 1px solid var(--sample-border);
     border-radius: 0.75rem;
-    background: var(--muted);
+    background: var(--sample-code);
     padding: 1.25rem;
     font-family: var(--preview-code);
     font-size: 0.88rem;
