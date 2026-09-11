@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1060" viewBox="0 0 1200 1060" role="img" aria-labelledby="title desc">
+  <title id="title">Pi 的 Agent Loop 工具调用时序</title>
+  <desc id="desc">展示输入经过 AgentSession 进入 Agent Loop，模型生成工具调用，工具执行并将结果回灌模型，最终响应持久化的全过程。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1220"/>
+      <stop offset="1" stop-color="#121f31"/>
+    </linearGradient>
+    <marker id="blue-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10z" fill="#7dd3fc"/>
+    </marker>
+    <marker id="mint-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10z" fill="#5eead4"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="1060" rx="28" fill="url(#bg)"/>
+  <text x="58" y="64" fill="#f1f5f9" font-family="Inter, PingFang SC, sans-serif" font-size="32" font-weight="700">一次带 Tool Use 的完整消息循环</text>
+  <text x="58" y="98" fill="#94a3b8" font-family="Inter, PingFang SC, sans-serif" font-size="17">一个 turn = 一次模型响应 + 该响应触发的全部工具结果</text>
+
+  <g font-family="Inter, PingFang SC, sans-serif">
+    <g>
+      <rect x="45" y="135" width="170" height="58" rx="14" fill="#172554" stroke="#60a5fa"/>
+      <text x="130" y="171" text-anchor="middle" fill="#dbeafe" font-size="18" font-weight="700">UI / Mode</text>
+    </g>
+    <g>
+      <rect x="270" y="135" width="190" height="58" rx="14" fill="#12312f" stroke="#5eead4"/>
+      <text x="365" y="171" text-anchor="middle" fill="#ccfbf1" font-size="18" font-weight="700">AgentSession</text>
+    </g>
+    <g>
+      <rect x="515" y="135" width="170" height="58" rx="14" fill="#2e1b4d" stroke="#c084fc"/>
+      <text x="600" y="171" text-anchor="middle" fill="#f3e8ff" font-size="18" font-weight="700">Agent Loop</text>
+    </g>
+    <g>
+      <rect x="740" y="135" width="170" height="58" rx="14" fill="#3b2514" stroke="#fbbf24"/>
+      <text x="825" y="171" text-anchor="middle" fill="#fef3c7" font-size="18" font-weight="700">Provider</text>
+    </g>
+    <g>
+      <rect x="965" y="135" width="190" height="58" rx="14" fill="#102a43" stroke="#38bdf8"/>
+      <text x="1060" y="171" text-anchor="middle" fill="#e0f2fe" font-size="18" font-weight="700">Tool Registry</text>
+    </g>
+  </g>
+
+  <g stroke="#475569" stroke-width="2" stroke-dasharray="6 7">
+    <line x1="130" y1="193" x2="130" y2="995"/>
+    <line x1="365" y1="193" x2="365" y2="995"/>
+    <line x1="600" y1="193" x2="600" y2="995"/>
+    <line x1="825" y1="193" x2="825" y2="995"/>
+    <line x1="1060" y1="193" x2="1060" y2="995"/>
+  </g>
+
+  <g font-family="Inter, PingFang SC, sans-serif" font-size="15">
+    <text x="58" y="235" fill="#60a5fa" font-size="14" font-weight="700">INPUT PREFLIGHT</text>
+    <path d="M130 265 H353" stroke="#7dd3fc" stroke-width="3" marker-end="url(#blue-arrow)"/>
+    <text x="241" y="255" text-anchor="middle" fill="#dbeafe">prompt(text, images)</text>
+
+    <rect x="290" y="285" width="150" height="78" rx="10" fill="#153b35" stroke="#2dd4bf"/>
+    <text x="365" y="314" text-anchor="middle" fill="#ccfbf1">Command / Input Hook</text>
+    <text x="365" y="338" text-anchor="middle" fill="#99f6e4">Skill / Template 展开</text>
+    <text x="365" y="356" text-anchor="middle" fill="#99f6e4">认证与压缩检查</text>
+
+    <path d="M365 390 H588" stroke="#7dd3fc" stroke-width="3" marker-end="url(#blue-arrow)"/>
+    <text x="477" y="380" text-anchor="middle" fill="#dbeafe">Agent.prompt(messages)</text>
+
+    <text x="58" y="438" fill="#c084fc" font-size="14" font-weight="700">TURN 1 · MODEL DECIDES</text>
+    <path d="M600 468 H813" stroke="#7dd3fc" stroke-width="3" marker-end="url(#blue-arrow)"/>
+    <text x="707" y="457" text-anchor="middle" fill="#dbeafe">system + messages + tools</text>
+    <path d="M825 520 H612" stroke="#fbbf24" stroke-width="3" marker-end="url(#blue-arrow)"/>
+    <text x="718" y="509" text-anchor="middle" fill="#fde68a">stream: thinking / text / toolCall</text>
+
+    <path d="M600 565 H1048" stroke="#5eead4" stroke-width="3" marker-end="url(#mint-arrow)"/>
+    <text x="824" y="554" text-anchor="middle" fill="#99f6e4">lookup → prepare → validate → beforeToolCall</text>
+
+    <rect x="985" y="585" width="150" height="78" rx="10" fill="#102a43" stroke="#38bdf8"/>
+    <text x="1060" y="615" text-anchor="middle" fill="#e0f2fe">execute(args)</text>
+    <text x="1060" y="639" text-anchor="middle" fill="#bae6fd">可并行 / 可流式更新</text>
+
+    <path d="M1048 700 H612" stroke="#5eead4" stroke-width="3" marker-end="url(#mint-arrow)"/>
+    <text x="830" y="689" text-anchor="middle" fill="#99f6e4">afterToolCall → ToolResultMessage</text>
+
+    <path d="M600 742 H377" stroke="#7dd3fc" stroke-width="3" marker-end="url(#blue-arrow)"/>
+    <text x="489" y="731" text-anchor="middle" fill="#dbeafe">message_end events</text>
+    <rect x="290" y="757" width="150" height="61" rx="10" fill="#153b35" stroke="#2dd4bf"/>
+    <text x="365" y="783" text-anchor="middle" fill="#ccfbf1">写入 JSONL Session</text>
+    <text x="365" y="805" text-anchor="middle" fill="#99f6e4">通知 Extensions / UI</text>
+
+    <text x="58" y="858" fill="#c084fc" font-size="14" font-weight="700">TURN 2 · MODEL OBSERVES RESULT</text>
+    <path d="M600 884 H813" stroke="#7dd3fc" stroke-width="3" marker-end="url(#blue-arrow)"/>
+    <text x="707" y="873" text-anchor="middle" fill="#dbeafe">上下文追加 toolResult</text>
+    <path d="M825 927 H612" stroke="#fbbf24" stroke-width="3" marker-end="url(#blue-arrow)"/>
+    <text x="718" y="916" text-anchor="middle" fill="#fde68a">最终答案，或再次调用工具</text>
+
+    <path d="M600 974 H142" stroke="#7dd3fc" stroke-width="3" marker-end="url(#blue-arrow)"/>
+    <text x="371" y="963" text-anchor="middle" fill="#dbeafe">message_update* → message_end → agent_settled</text>
+  </g>
+
+  <rect x="68" y="1010" width="1064" height="34" rx="10" fill="#0f2433"/>
+  <text x="600" y="1033" text-anchor="middle" fill="#94a3b8" font-family="Inter, PingFang SC, sans-serif" font-size="14">Tool Call 不是最终答案：它必须形成 Tool Result，才能成为下一轮模型可观察的新事实</text>
+</svg>

@@ -3,7 +3,7 @@
 @layer base {
   /* ===== Override default Tailwind Typography styles ===== */
   .app-prose {
-    @apply prose;
+    @apply prose min-w-0;
 
     h1,
     h2,
@@ -48,7 +48,7 @@
     }
 
     img {
-      @apply border-border mx-auto rounded-xl border shadow-sm;
+      @apply border-border mx-auto h-auto max-w-full rounded-xl border shadow-sm;
     }
 
     img[role="button"] {
@@ -68,6 +68,8 @@
     }
 
     table {
+      @apply block max-w-full overflow-x-auto;
+
       th,
       td {
         @apply border-border border p-2;

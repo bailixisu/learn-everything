@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-labelledby="title desc">
+  <title id="title">Pi Coding Agent 整体分层架构</title>
+  <desc id="desc">展示交互入口层、应用编排层、Agent 执行层和模型适配层，以及资源能力面与状态记忆面。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#111c2e"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#020617" flood-opacity=".35"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7dd3fc"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="900" rx="28" fill="url(#bg)"/>
+  <text x="70" y="68" fill="#e2e8f0" font-family="Inter, PingFang SC, sans-serif" font-size="32" font-weight="700">Pi Coding Agent：四层主链 + 两个支撑面</text>
+  <text x="70" y="103" fill="#94a3b8" font-family="Inter, PingFang SC, sans-serif" font-size="17">稳定 CLI v0.85.1 的真实运行边界</text>
+
+  <g filter="url(#shadow)" font-family="Inter, PingFang SC, sans-serif">
+    <rect x="245" y="145" width="710" height="120" rx="20" fill="#172554" stroke="#60a5fa" stroke-width="2"/>
+    <circle cx="292" cy="205" r="25" fill="#2563eb"/>
+    <text x="292" y="213" text-anchor="middle" fill="white" font-size="23" font-weight="700">1</text>
+    <text x="338" y="188" fill="#dbeafe" font-size="24" font-weight="700">交互与入口层</text>
+    <text x="338" y="224" fill="#bfdbfe" font-size="18">CLI · Interactive · Print · JSON · RPC</text>
+    <text x="338" y="249" fill="#93c5fd" font-size="15">输入、模式选择、事件展示</text>
+
+    <rect x="245" y="305" width="710" height="120" rx="20" fill="#12312f" stroke="#5eead4" stroke-width="2"/>
+    <circle cx="292" cy="365" r="25" fill="#0f766e"/>
+    <text x="292" y="373" text-anchor="middle" fill="white" font-size="23" font-weight="700">2</text>
+    <text x="338" y="348" fill="#ccfbf1" font-size="24" font-weight="700">应用编排层</text>
+    <text x="338" y="384" fill="#99f6e4" font-size="18">AgentSession · ResourceLoader · SessionManager</text>
+    <text x="338" y="409" fill="#5eead4" font-size="15">输入预处理、扩展、重试、压缩与持久化</text>
+
+    <rect x="245" y="465" width="710" height="120" rx="20" fill="#2e1b4d" stroke="#c084fc" stroke-width="2"/>
+    <circle cx="292" cy="525" r="25" fill="#7e22ce"/>
+    <text x="292" y="533" text-anchor="middle" fill="white" font-size="23" font-weight="700">3</text>
+    <text x="338" y="508" fill="#f3e8ff" font-size="24" font-weight="700">Agent 执行层</text>
+    <text x="338" y="544" fill="#e9d5ff" font-size="18">Agent · runAgentLoop · Tool Execution</text>
+    <text x="338" y="569" fill="#d8b4fe" font-size="15">模型—工具循环、消息队列与生命周期事件</text>
+
+    <rect x="245" y="625" width="710" height="120" rx="20" fill="#3b2514" stroke="#fbbf24" stroke-width="2"/>
+    <circle cx="292" cy="685" r="25" fill="#b45309"/>
+    <text x="292" y="693" text-anchor="middle" fill="white" font-size="23" font-weight="700">4</text>
+    <text x="338" y="668" fill="#fef3c7" font-size="24" font-weight="700">模型适配层</text>
+    <text x="338" y="704" fill="#fde68a" font-size="18">pi-ai · ModelRuntime · Provider API</text>
+    <text x="338" y="729" fill="#fcd34d" font-size="15">认证、协议转换、流式输出与用量统计</text>
+  </g>
+
+  <g stroke="#7dd3fc" stroke-width="3" fill="none" marker-end="url(#arrow)">
+    <path d="M600 266 V295"/>
+    <path d="M600 426 V455"/>
+    <path d="M600 586 V615"/>
+  </g>
+
+  <g font-family="Inter, PingFang SC, sans-serif">
+    <rect x="45" y="235" width="160" height="420" rx="20" fill="#102a43" stroke="#38bdf8" stroke-dasharray="7 6"/>
+    <text x="125" y="275" text-anchor="middle" fill="#bae6fd" font-size="20" font-weight="700">能力资源面</text>
+    <line x1="74" y1="294" x2="176" y2="294" stroke="#38bdf8" opacity=".5"/>
+    <text x="125" y="340" text-anchor="middle" fill="#e0f2fe" font-size="17">Tools</text>
+    <text x="125" y="390" text-anchor="middle" fill="#e0f2fe" font-size="17">Skills</text>
+    <text x="125" y="440" text-anchor="middle" fill="#e0f2fe" font-size="17">Prompts</text>
+    <text x="125" y="490" text-anchor="middle" fill="#e0f2fe" font-size="17">Extensions</text>
+    <text x="125" y="540" text-anchor="middle" fill="#e0f2fe" font-size="17">Packages</text>
+    <text x="125" y="608" text-anchor="middle" fill="#7dd3fc" font-size="14">提供“会做什么”</text>
+
+    <rect x="995" y="235" width="160" height="420" rx="20" fill="#25203d" stroke="#a78bfa" stroke-dasharray="7 6"/>
+    <text x="1075" y="275" text-anchor="middle" fill="#ddd6fe" font-size="20" font-weight="700">状态记忆面</text>
+    <line x1="1024" y1="294" x2="1126" y2="294" stroke="#a78bfa" opacity=".5"/>
+    <text x="1075" y="340" text-anchor="middle" fill="#ede9fe" font-size="17">Agent State</text>
+    <text x="1075" y="390" text-anchor="middle" fill="#ede9fe" font-size="17">Session Tree</text>
+    <text x="1075" y="440" text-anchor="middle" fill="#ede9fe" font-size="17">Context Files</text>
+    <text x="1075" y="490" text-anchor="middle" fill="#ede9fe" font-size="17">Compaction</text>
+    <text x="1075" y="540" text-anchor="middle" fill="#ede9fe" font-size="17">Custom State</text>
+    <text x="1075" y="608" text-anchor="middle" fill="#c4b5fd" font-size="14">提供“记住什么”</text>
+  </g>
+
+  <g stroke-width="2" fill="none" stroke-dasharray="6 5">
+    <path d="M205 365 H235" stroke="#38bdf8" marker-end="url(#arrow)"/>
+    <path d="M205 525 H235" stroke="#38bdf8" marker-end="url(#arrow)"/>
+    <path d="M965 365 H985" stroke="#a78bfa" marker-end="url(#arrow)"/>
+    <path d="M965 525 H985" stroke="#a78bfa" marker-end="url(#arrow)"/>
+  </g>
+
+  <rect x="245" y="796" width="710" height="60" rx="14" fill="#0f2433" stroke="#334155"/>
+  <text x="600" y="833" text-anchor="middle" fill="#cbd5e1" font-family="Inter, PingFang SC, sans-serif" font-size="18">主链负责推进过程 · 能力面扩展动作 · 状态面保持连续性</text>
+</svg>
