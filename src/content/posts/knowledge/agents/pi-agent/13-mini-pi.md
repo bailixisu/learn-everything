@@ -4,7 +4,7 @@ description: "用 pi-ai 与 pi-agent-core 构造最小 Agent，并用确定性 F
 ogImage: "./13-mini-pi-assets/00-cover.webp"
 pubDatetime: 2026-09-11T18:52:00+08:00
 featured: false
-draft: true
+draft: false
 type: knowledge
 series: "Pi Coding Agent 源码导读"
 order: 13

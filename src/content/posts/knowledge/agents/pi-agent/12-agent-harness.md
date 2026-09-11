@@ -4,7 +4,7 @@ description: "分析 Pi experimental AgentHarness 的 Session、Branch、AgentLa
 ogImage: "./12-agent-harness-assets/00-cover.webp"
 pubDatetime: 2026-09-11T18:51:00+08:00
 featured: false
-draft: true
+draft: false
 type: knowledge
 series: "Pi Coding Agent 源码导读"
 order: 12

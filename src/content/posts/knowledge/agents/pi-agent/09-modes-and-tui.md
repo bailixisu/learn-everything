@@ -4,7 +4,7 @@ description: "比较 Pi 的四种运行模式和直接 SDK 集成，解释同一
 ogImage: "./09-modes-and-tui-assets/00-cover.webp"
 pubDatetime: 2026-09-11T18:48:00+08:00
 featured: false
-draft: true
+draft: false
 type: knowledge
 series: "Pi Coding Agent 源码导读"
 order: 9

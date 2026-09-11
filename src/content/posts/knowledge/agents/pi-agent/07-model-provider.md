@@ -4,7 +4,7 @@ description: "拆解 pi-ai、ModelRuntime、模型目录、认证解析、Provid
 ogImage: "./07-model-provider-assets/00-cover.webp"
 pubDatetime: 2026-09-11T18:46:00+08:00
 featured: false
-draft: true
+draft: false
 type: knowledge
 series: "Pi Coding Agent 源码导读"
 order: 7

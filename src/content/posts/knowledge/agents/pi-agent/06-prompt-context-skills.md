@@ -4,7 +4,7 @@ description: "从 buildSystemPrompt() 与 AgentSession.prompt() 出发，分析�
 ogImage: "./06-prompt-context-skills-assets/00-cover.webp"
 pubDatetime: 2026-09-11T18:45:00+08:00
 featured: false
-draft: true
+draft: false
 type: knowledge
 series: "Pi Coding Agent 源码导读"
 order: 6

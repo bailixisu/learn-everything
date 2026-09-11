@@ -4,7 +4,7 @@ description: "以 Pi v0.85.1 的官方文档和源码为依据，拆解 CLI、Ag
 ogImage: "./01-overall-architecture-assets/00-cover.webp"
 pubDatetime: 2026-09-11T18:40:00+08:00
 featured: false
-draft: true
+draft: false
 type: knowledge
 series: "Pi Coding Agent 源码导读"
 order: 1

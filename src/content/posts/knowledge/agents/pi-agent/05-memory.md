@@ -4,7 +4,7 @@ description: "从工作上下文、JSONL 会话树、项目规则、Skills、Cus
 ogImage: "./05-memory-assets/00-cover.webp"
 pubDatetime: 2026-09-11T18:44:00+08:00
 featured: false
-draft: true
+draft: false
 type: knowledge
 series: "Pi Coding Agent 源码导读"
 order: 5

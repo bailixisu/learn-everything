@@ -4,7 +4,7 @@ description: "拆解 Pi 工具的定义、参数准备、TypeBox 校验、Extens
 ogImage: "./04-tool-use-assets/00-cover.webp"
 pubDatetime: 2026-09-11T18:43:00+08:00
 featured: false
-draft: true
+draft: false
 type: knowledge
 series: "Pi Coding Agent 源码导读"
 order: 4

@@ -4,7 +4,7 @@ description: "深入 Pi JSONL v3 的 append-only 会话树，解释 branch、for
 ogImage: "./10-session-tree-compaction-assets/00-cover.webp"
 pubDatetime: 2026-09-11T18:49:00+08:00
 featured: false
-draft: true
+draft: false
 type: knowledge
 series: "Pi Coding Agent 源码导读"
 order: 10

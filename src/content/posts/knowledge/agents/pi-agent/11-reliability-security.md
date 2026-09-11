@@ -4,7 +4,7 @@ description: "分析 Pi 的 Abort、Retry、Overflow Recovery、事件结算、P
 ogImage: "./11-reliability-security-assets/00-cover.webp"
 pubDatetime: 2026-09-11T18:50:00+08:00
 featured: false
-draft: true
+draft: false
 type: knowledge
 series: "Pi Coding Agent 源码导读"
 order: 11

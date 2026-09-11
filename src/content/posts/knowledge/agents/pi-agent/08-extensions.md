@@ -4,7 +4,7 @@ description: "系统梳理 Pi Extension 的加载、事件、Hook、命令、工
 ogImage: "./08-extensions-assets/00-cover.webp"
 pubDatetime: 2026-09-11T18:47:00+08:00
 featured: false
-draft: true
+draft: false
 type: knowledge
 series: "Pi Coding Agent 源码导读"
 order: 8

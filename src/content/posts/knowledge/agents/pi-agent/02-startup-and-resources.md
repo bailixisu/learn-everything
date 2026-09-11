@@ -4,7 +4,7 @@ description: "沿着 main()、createAgentSessionServices() 与 DefaultResourceLo
 ogImage: "./02-startup-and-resources-assets/00-cover.webp"
 pubDatetime: 2026-09-11T18:41:00+08:00
 featured: false
-draft: true
+draft: false
 type: knowledge
 series: "Pi Coding Agent 源码导读"
 order: 2
