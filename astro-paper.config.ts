@@ -2,8 +2,7 @@ import { defineAstroPaperConfig } from "./src/types/config";
 
 export default defineAstroPaperConfig({
   site: {
-    // 部署到 Vercel 后，将这里替换为实际域名。
-    url: "https://learn-everything-bailixisu.vercel.app/",
+    url: "https://bailixisu.com/",
     title: "Learn Everything",
     description: "bailixisu 的个人数字花园：记录学习、项目实践与持续思考。",
     author: "bailixisu",
