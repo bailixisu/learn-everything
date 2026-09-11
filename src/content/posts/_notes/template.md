@@ -4,6 +4,7 @@ description: "用一句话说明文章解决什么问题。"
 pubDatetime: 2026-09-11T12:00:00+08:00
 featured: false
 draft: true
+type: knowledge
 tags:
   - 学习笔记
 ---
