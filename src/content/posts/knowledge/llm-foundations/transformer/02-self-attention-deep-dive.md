@@ -3,6 +3,7 @@ title: "大模型基础（二）：Self-Attention 从张量到多头机制"
 description: "逐步拆解 Q、K、V 投影、缩放点积、Mask、Softmax、Value 聚合与 Multi-Head Attention，并用可手算案例解释训练和推理中的真实数据流。"
 ogImage: "./02-self-attention-deep-dive-assets/00-cover.webp"
 pubDatetime: 2026-09-12T01:50:00+08:00
+modDatetime: 2026-09-12T11:50:00+08:00
 featured: false
 draft: false
 type: knowledge
@@ -32,33 +33,31 @@ Attention 经常被解释成“给重要的词更高权重”，但这句话隐�
 
 本文会从张量形状开始，完整走过一次 Scaled Dot-Product Attention，再扩展到 Multi-Head、Cross-Attention 与自回归推理。
 
-> **符号约定**：`B` 表示 Batch Size，`N` 表示序列长度，`D` 表示模型维度，`H` 表示 Head 数量，`Dh = D / H` 表示每个 Head 的维度。
+> **符号约定**：$B$ 表示 Batch Size，$N$ 表示序列长度，$D$ 表示模型维度，$H$ 表示 Head 数量，$D_h=D/H$ 表示每个 Head 的维度。
 
 ## 一、Attention 不是一个分数，而是一条数据流水线
 
 一次标准 Self-Attention 可以写成：
 
-```text
-Q = X W_Q
-K = X W_K
-V = X W_V
-
-S = Q K^T / sqrt(Dh)
-A = softmax(S + M)
-Z = A V
-```
+$$
+\begin{aligned}
+Q&=XW_Q, & K&=XW_K,\\
+V&=XW_V, & S&=\frac{QK^{\top}}{\sqrt{D_h}},\\
+A&=\operatorname{softmax}(S+M), & Z&=AV.
+\end{aligned}
+$$
 
 其中：
 
-- `X` 是输入 Token 表示；
-- `S` 是每个 Query 与每个 Key 的匹配分数；
-- `M` 是可选 Mask；
-- `A` 是归一化后的注意力权重；
-- `Z` 是聚合 Value 后的上下文表示。
+- $X$ 是输入 Token 表示；
+- $S$ 是每个 Query 与每个 Key 的匹配分数；
+- $M$ 是可选 Mask；
+- $A$ 是归一化后的注意力权重；
+- $Z$ 是聚合 Value 后的上下文表示。
 
 ![Self-Attention 的完整张量流水线](./02-self-attention-deep-dive-assets/01-qkv-tensor-pipeline.svg)
 
-_图 1：单个 Attention Head 的完整数据流。矩阵形状明确说明了二次项产生在 `N × N` 的 Score 和 Weight，而不是所有步骤都具有二次复杂度。_
+_图 1：单个 Attention Head 的完整数据流。矩阵形状明确说明了二次项产生在 $N\times N$ 的 Score 和 Weight，而不是所有步骤都具有二次复杂度。_
 
 这条流水线可以分成三个问题：
 
@@ -70,15 +69,13 @@ Q、K、V 分别回答这三个问题。
 
 ## 二、为什么需要 Query、Key 和 Value
 
-假设 Token `x_i` 同时包含词义、位置、句法和上下文特征。如果直接用 `x_i · x_j` 计算相似度，匹配条件与被取回内容会被绑定在同一个空间里。
+假设 Token $x_i$ 同时包含词义、位置、句法和上下文特征。如果直接用 $\langle x_i,x_j\rangle$ 计算相似度，匹配条件与被取回内容会被绑定在同一个空间里。
 
 Transformer 使用三套可学习投影：
 
-```text
-q_i = x_i W_Q
-k_i = x_i W_K
-v_i = x_i W_V
-```
+$$
+q_i=x_iW_Q,\quad k_i=x_iW_K,\quad v_i=x_iW_V
+$$
 
 可以用检索系统类比：
 
@@ -96,11 +93,9 @@ v_i = x_i W_V
 
 Self-Attention 中三者来自同一个输入：
 
-```text
-Q = X W_Q
-K = X W_K
-V = X W_V
-```
+$$
+Q=XW_Q,\quad K=XW_K,\quad V=XW_V
+$$
 
 “Self”不是说某个 Token 只关注自己，而是说 Query、Key 和 Value 都来自同一组序列表示。
 
@@ -108,11 +103,13 @@ V = X W_V
 
 在 Encoder–Decoder Transformer 中：
 
-```text
-Q = Y W_Q          # Decoder 当前状态
-K = X_enc W_K      # Encoder 输出
-V = X_enc W_V      # Encoder 输出
-```
+$$
+\begin{aligned}
+Q&=YW_Q,\\
+K&=X_{\mathrm{enc}}W_K,\quad
+V=X_{\mathrm{enc}}W_V.
+\end{aligned}
+$$
 
 Decoder 用自己的状态提出 Query，到 Encoder Memory 中匹配 Key 并取回 Value。
 
@@ -122,34 +119,35 @@ Decoder 用自己的状态提出 Query，到 Encoder Memory 中匹配 Key 并取
 
 先忽略 Batch 和 Multi-Head，假设：
 
-```text
-X:   [N, D]
-W_Q: [D, Dh]
-W_K: [D, Dh]
-W_V: [D, Dv]
-```
+$$
+\begin{aligned}
+X&\in\mathbb{R}^{N\times D},\\
+W_Q,W_K&\in\mathbb{R}^{D\times D_h},\\
+W_V&\in\mathbb{R}^{D\times D_v}.
+\end{aligned}
+$$
 
 投影后：
 
-```text
-Q: [N, Dh]
-K: [N, Dh]
-V: [N, Dv]
-```
+$$
+Q,K\in\mathbb{R}^{N\times D_h},\qquad
+V\in\mathbb{R}^{N\times D_v}
+$$
 
 计算：
 
-```text
-Q K^T: [N, Dh] × [Dh, N] = [N, N]
-```
+$$
+QK^{\top}:
+[N,D_h]\,[D_h,N]\longrightarrow[N,N]
+$$
 
 Score Matrix 的含义是：
 
-```text
-行 i：第 i 个 Query
-列 j：第 j 个 Key
-S[i,j]：位置 i 对位置 j 的匹配分数
-```
+$$
+S_{ij}=\frac{\langle q_i,k_j\rangle}{\sqrt{D_h}}
+$$
+
+其中行索引 $i$ 对应 Query，列索引 $j$ 对应 Key。
 
 这也是理解 Softmax 轴的关键：对每一个 Query，应该在它可以访问的所有 Key 上归一化，所以 Softmax 沿最后一个维度，也就是 Key 维度执行。
 
@@ -159,39 +157,37 @@ weights = torch.softmax(scores, dim=-1)
 
 每一行满足：
 
-```text
-sum_j A[i,j] = 1
-```
+$$
+\sum_j A_{ij}=1
+$$
 
 但不同 Query 的两行之间不需要归一化，也不要求注意力矩阵对称。
 
-> 即使 `Q = K`，Softmax 的逐行归一化也可能让最终 Attention Weight 不对称；实际模型通常还有不同的 Q、K 投影。
+> 即使 $Q=K$，Softmax 的逐行归一化也可能让最终 Attention Weight 不对称；实际模型通常还有不同的 Q、K 投影。
 
 ## 四、为什么除以 sqrt(Dh)
 
 如果 Query 和 Key 每个分量近似独立、均值为 0、方差为 1，那么点积：
 
-```text
-q · k = sum_{r=1}^{Dh} q_r k_r
-```
+$$
+\langle q,k\rangle=\sum_{r=1}^{D_h}q_rk_r
+$$
 
-由 `Dh` 个项相加，方差会随 `Dh` 增长到约 `Dh`，标准差约为 `sqrt(Dh)`。
+由 $D_h$ 个项相加，方差会随 $D_h$ 增长到约 $D_h$，标准差约为 $\sqrt{D_h}$。
 
 维度越大，未经缩放的点积绝对值越容易变大。大幅度 Logit 进入 Softmax 后，输出会非常接近 one-hot：
 
-```text
-softmax([0.2, 0.5, 0.8])     → 相对平滑
-softmax([2, 5, 8])           → 高度尖锐
-softmax([20, 50, 80])        → 接近完全饱和
-```
+- $\operatorname{softmax}([0.2,0.5,0.8])$：相对平滑；
+- $\operatorname{softmax}([2,5,8])$：高度尖锐；
+- $\operatorname{softmax}([20,50,80])$：接近完全饱和。
 
 Softmax 进入饱和区域后，除最大项外的梯度会很小。
 
 因此标准 Attention 使用：
 
-```text
-S = Q K^T / sqrt(Dh)
-```
+$$
+S=\frac{QK^{\top}}{\sqrt{D_h}}
+$$
 
 缩放的目标不是改变哪个 Key 最大，而是让分数尺度在不同 Head Dimension 下更稳定。
 
@@ -199,18 +195,24 @@ S = Q K^T / sqrt(Dh)
 
 Mask 的作用不是把输出权重“看起来变成零”，而是让被禁止位置不参与概率归一化。
 
-通常做法是：
+通常做法是：记 $\mathcal{A}_i$ 为 Query $i$ 允许访问的 Key 集合，则
 
-```text
-scores[masked_position] = -infinity
-weights = softmax(scores)
-```
+$$
+\begin{aligned}
+\widetilde S_{ij}&=
+\begin{cases}
+S_{ij}, & j\in\mathcal{A}_i,\\
+-\infty, & j\notin\mathcal{A}_i,
+\end{cases}\\
+A&=\operatorname{softmax}(\widetilde S).
+\end{aligned}
+$$
 
 因为：
 
-```text
-exp(-infinity) = 0
-```
+$$
+\exp(-\infty)=0
+$$
 
 所以被屏蔽位置的权重严格为零，其余合法位置重新归一化。
 
@@ -220,11 +222,11 @@ _图 2：Causal Mask 在 Softmax 前加入。每一行代表一个 Query，每�
 
 ### Causal Mask
 
-自回归生成中，第 `i` 个位置只能看到：
+自回归生成中，第 $i$ 个位置只能看到：
 
-```text
-j <= i
-```
+$$
+j\le i
+$$
 
 四个 Token 的可见性为：
 
@@ -244,35 +246,35 @@ Batch 中句子长度不同时，短句通常会补 Padding。Padding Key 不应
 
 Decoder 训练时经常同时使用：
 
-```text
-Final Mask = Causal Mask OR Padding Mask
-```
+$$
+M_{\mathrm{final}}=M_{\mathrm{causal}}\lor M_{\mathrm{padding}}
+$$
 
 ### 为什么不能在 Softmax 后直接乘零
 
 假设原权重是：
 
-```text
-[0.2, 0.3, 0.5]
-```
+$$
+[0.2,\ 0.3,\ 0.5]
+$$
 
 Softmax 后再把第三项乘零：
 
-```text
-[0.2, 0.3, 0.0]
-```
+$$
+[0.2,\ 0.3,\ 0]
+$$
 
 剩余权重和只有 `0.5`，不再是合法归一化分布。虽然可以再次除以总和，但这等价于重新归一化，也更容易在数值和实现上出错。
 
 ## 六、Softmax 后为什么乘 V
 
-对于第 `i` 个 Query，输出是：
+对于第 $i$ 个 Query，输出是：
 
-```text
-z_i = sum_j A[i,j] v_j
-```
+$$
+z_i=\sum_j A_{ij}v_j
+$$
 
-这表示 `z_i` 是所有可见 Value 的加权和。
+这表示 $z_i$ 是所有可见 Value 的加权和。
 
 需要特别注意：
 
@@ -283,17 +285,16 @@ z_i = sum_j A[i,j] v_j
 
 矩阵形式：
 
-```text
-A: [N, N]
-V: [N, Dv]
-Z: [N, Dv]
-```
+$$
+A\in\mathbb{R}^{N\times N},\qquad
+V,Z\in\mathbb{R}^{N\times D_v}
+$$
 
 因此：
 
-```text
-Z = A V
-```
+$$
+Z=AV
+$$
 
 Attention Matrix 决定跨位置的信息路由，Value Matrix 提供真正被路由的内容。
 
@@ -301,64 +302,68 @@ Attention Matrix 决定跨位置的信息路由，Value Matrix 提供真正被�
 
 设序列只有三个 Token，每个 Head 的维度为 2。为了集中观察聚合过程，取：
 
-```text
-Q = [[1,0],
-     [0,1],
-     [1,1]]
-
-K = [[1,0],
-     [0,1],
-     [1,1]]
-
-V = [[1,0],
-     [0,2],
-     [1,1]]
-```
+$$
+Q=K=
+\begin{bmatrix}
+1&0\\
+0&1\\
+1&1
+\end{bmatrix},
+\qquad
+V=
+\begin{bmatrix}
+1&0\\
+0&2\\
+1&1
+\end{bmatrix}
+$$
 
 现在只计算第三个 Query：
 
-```text
-q_3 = [1,1]
-```
+$$
+q_3=[1,1]
+$$
 
 ### 1. 与三个 Key 点积
 
-```text
-q_3 · k_1 = 1
-q_3 · k_2 = 1
-q_3 · k_3 = 2
-```
+$$
+\begin{aligned}
+\langle q_3,k_1\rangle&=1, &
+\langle q_3,k_2\rangle&=1,\\
+\langle q_3,k_3\rangle&=2.
+\end{aligned}
+$$
 
 ### 2. 除以 sqrt(2)
 
-```text
-scores ≈ [0.707, 0.707, 1.414]
-```
+$$
+s\approx[0.707,\ 0.707,\ 1.414]
+$$
 
 ### 3. 计算 Softmax
 
-```text
-weights ≈ [0.248, 0.248, 0.503]
-```
+$$
+a=\operatorname{softmax}(s)
+\approx[0.248,\ 0.248,\ 0.503]
+$$
 
 由于四舍五入，三项显示值之和约为 `0.999`；使用完整精度时总和为 1。
 
 ### 4. 聚合 Value
 
-```text
+$$
+\begin{aligned}
 z_3
-= 0.248 × [1,0]
-+ 0.248 × [0,2]
-+ 0.503 × [1,1]
-
-≈ [0.751, 0.999]
-```
+&=0.248[1,0]+0.248[0,2]+0.503[1,1]\\
+&\approx[0.751,\ 0.999].
+\end{aligned}
+$$
 
 ![第三个 Query 的可手算 Attention 案例](./02-self-attention-deep-dive-assets/03-worked-example.svg)
 
 _图 3：这是人工构造的教学案例，不是模型训练得到的权重。它展示了一个 Query 如何通过三个标量权重聚合三个 Value Vector。_
 
-这个案例说明，第三个 Query 最关注第三个 Token，但输出并不是复制 `v_3`，而是三个 Value 的混合。
+这个案例说明，第三个 Query 最关注第三个 Token，但输出并不是复制 $v_3$，而是三个 Value 的混合。
 
 ## 八、Multi-Head Attention 怎样组织张量
 
@@ -366,42 +371,45 @@ _图 3：这是人工构造的教学案例，不是模型训练得到的权重�
 
 输入：
 
-```text
-X: [B, N, D]
-```
+$$
+X\in\mathbb{R}^{B\times N\times D}
+$$
 
 经过一次大的线性投影，或者三次独立投影后，通常会 reshape 为：
 
-```text
-Q: [B, H, N, Dh]
-K: [B, H, N, Dh]
-V: [B, H, N, Dh]
-```
+$$
+Q,K,V\in\mathbb{R}^{B\times H\times N\times D_h}
+$$
 
 其中：
 
-```text
-D = H × Dh
-```
+$$
+D=H\,D_h
+$$
 
 每个 Head 独立计算：
 
-```text
-A_h = softmax(Q_h K_h^T / sqrt(Dh) + M)
-Z_h = A_h V_h
-```
+$$
+\begin{aligned}
+A_h&=\operatorname{softmax}\!\left(
+\frac{Q_hK_h^{\top}}{\sqrt{D_h}}+M
+\right),\\
+Z_h&=A_hV_h.
+\end{aligned}
+$$
 
 随后：
 
-```text
-Concat(Z_1, Z_2, ..., Z_H): [B, N, D]
-```
+$$
+\operatorname{Concat}(Z_1,Z_2,\ldots,Z_H)
+\in\mathbb{R}^{B\times N\times D}
+$$
 
 最后经过输出投影：
 
-```text
-Y = Concat(Z_1, ..., Z_H) W_O
-```
+$$
+Y=\operatorname{Concat}(Z_1,\ldots,Z_H)W_O
+$$
 
 ![Multi-Head Attention 的切分、并行和合并](./02-self-attention-deep-dive-assets/04-multi-head.svg)
 
@@ -411,9 +419,9 @@ _图 4：Multi-Head 不是把完整维度无代价复制 H 次，而是通常把
 
 不同 Head 拥有不同的投影参数：
 
-```text
-W_Q^h, W_K^h, W_V^h
-```
+$$
+W_Q^{(h)},\qquad W_K^{(h)},\qquad W_V^{(h)}
+$$
 
 因此它们可以在不同表示子空间中建立路由关系。一个 Head 的高权重位置，不要求与另一个 Head 相同。
 
@@ -428,26 +436,24 @@ W_Q^h, W_K^h, W_V^h
 
 标准 Multi-Head Attention（MHA）中，每个 Query Head 都有自己的 K 和 V Head：
 
-```text
-Query Heads: H
-Key Heads:   H
-Value Heads: H
-```
+$$
+H_Q=H_K=H_V=H
+$$
 
 Multi-Query Attention（MQA）让多个 Query Head 共享一组 K/V：
 
-```text
-Query Heads: H
-Key Heads:   1
-Value Heads: 1
-```
+$$
+H_Q=H,\qquad H_K=H_V=1
+$$
 
 Grouped-Query Attention（GQA）位于两者之间：
 
-```text
-Query Heads: H
-Key/Value Groups: G，且 1 < G < H
-```
+$$
+\begin{aligned}
+H_Q&=H,\qquad H_K=H_V=G,\\
+1&<G<H.
+\end{aligned}
+$$
 
 主要收益出现在自回归推理：K/V Head 更少意味着 KV Cache 更小、读取带宽更低。代价是共享程度增加可能影响模型质量，因此 GQA 常被用作质量与推理效率之间的折中。
 
@@ -461,31 +467,34 @@ Teacher Forcing 下，完整目标序列已知，只需用 Causal Mask 阻止未
 
 因此一层可以并行计算：
 
-```text
-Q, K, V: [B, H, N, Dh]
-Scores:  [B, H, N, N]
-```
+$$
+\begin{aligned}
+Q,K,V&:[B,H,N,D_h],\\
+S&:[B,H,N,N].
+\end{aligned}
+$$
 
 虽然具有因果约束，但不是必须像 RNN 那样按 Token 逐步训练。
 
 ### 推理：一次通常只产生一个新 Token
 
-已经生成 `N` 个 Token 后，下一个 Decode Step 只产生一条新 Query、Key 和 Value：
+已经生成 $N$ 个 Token 后，下一个 Decode Step 只产生一条新 Query、Key 和 Value：
 
-```text
-q_new: [B, H, 1, Dh]
-k_new: [B, Hkv, 1, Dh]
-v_new: [B, Hkv, 1, Dh]
-```
+$$
+\begin{aligned}
+q_{\mathrm{new}}&:[B,H,1,D_h],\\
+k_{\mathrm{new}},v_{\mathrm{new}}&:[B,H_{kv},1,D_h].
+\end{aligned}
+$$
 
 历史 Token 的 K/V 不需要重复计算，因此保存为 KV Cache：
 
-```text
-K_cache: [B, Hkv, N, Dh]
-V_cache: [B, Hkv, N, Dh]
-```
+$$
+K_{\mathrm{cache}},V_{\mathrm{cache}}
+:[B,H_{kv},N,D_h]
+$$
 
-新 Query 与整个 `K_cache` 匹配，再从 `V_cache` 聚合信息。
+新 Query 与整个 $K_{\mathrm{cache}}$ 匹配，再从 $V_{\mathrm{cache}}$ 聚合信息。
 
 这带来两个事实：
 
@@ -496,26 +505,26 @@ V_cache: [B, Hkv, N, Dh]
 
 ## 十一、Attention 的复杂度应该怎样看
 
-一句“Attention 是 O(N²)”并不完整。设模型维度为 `D`：
+一句“Attention 是 $O(N^2)$”并不完整。设模型维度为 $D$：
 
 | 步骤       | 主要时间复杂度 | 主要中间形状 |
 | ---------- | -------------- | ------------ |
-| Q/K/V 投影 | `O(ND²)`       | `[N,D]`      |
-| Score 计算 | `O(N²D)`       | `[H,N,N]`    |
-| Softmax    | `O(HN²)`       | `[H,N,N]`    |
-| Value 聚合 | `O(N²D)`       | `[H,N,Dh]`   |
-| 输出投影   | `O(ND²)`       | `[N,D]`      |
+| Q/K/V 投影 | $O(ND^2)$      | $[N,D]$      |
+| Score 计算 | $O(N^2D)$      | $[H,N,N]$    |
+| Softmax    | $O(HN^2)$      | $[H,N,N]$    |
+| Value 聚合 | $O(N^2D)$      | $[H,N,D_h]$  |
+| 输出投影   | $O(ND^2)$      | $[N,D]$      |
 
-当 `N` 较短、`D` 很大时，线性投影和 FFN 也可能占据大量计算；当上下文很长时，`N²` 项会越来越突出。
+当 $N$ 较短、$D$ 很大时，线性投影和 FFN 也可能占据大量计算；当上下文很长时，$N^2$ 项会越来越突出。
 
 还要区分：
 
 - **计算复杂度**：做多少乘加；
-- **激活内存**：是否物化 `N × N` 中间矩阵；
+- **激活内存**：是否物化 $N\times N$ 中间矩阵；
 - **显存 IO**：数据在 HBM 与片上存储之间搬运多少次；
 - **推理 KV Cache**：长期保存多少 K/V 状态。
 
-FlashAttention 主要优化显存 IO 与中间激活存储，并保持标准 Attention 结果；Linear Attention 则通过改变代数形式避免显式 `N × N` 关系矩阵。两者不能只因为“都更快”而归为一类。
+FlashAttention 主要优化显存 IO 与中间激活存储，并保持标准 Attention 结果；Linear Attention 则通过改变代数形式避免显式 $N\times N$ 关系矩阵。两者不能只因为“都更快”而归为一类。
 
 ## 十二、一个最小但正确的实现
 
@@ -563,19 +572,21 @@ def scaled_dot_product_attention(q, k, v, allowed=None):
 
 稳定实现会使用：
 
-```text
-softmax(x) = exp(x - max(x)) / sum(exp(x - max(x)))
-```
+$$
+\operatorname{softmax}(x)_i
+=\frac{\exp(x_i-\max_j x_j)}
+{\sum_k\exp(x_k-\max_j x_j)}
+$$
 
 减去同一个常数不改变 Softmax 结果，却能降低指数溢出风险。
 
 ### 2. Mask 的负数必须足够小
 
-概念上使用 `-infinity`。实际低精度 Kernel 可能使用数据类型可表示的极小值，但必须确保被屏蔽位置的指数贡献为零。
+概念上使用 $-\infty$。实际低精度 Kernel 可能使用数据类型可表示的极小值，但必须确保被屏蔽位置的指数贡献为零。
 
 ### 3. 避免整行全部被屏蔽
 
-如果一整行都是 `-infinity`，Softmax 会出现未定义的 `0/0`，可能产生 NaN。Padding、序列切分和特殊 Token 逻辑需要保证每个有效 Query 至少存在一个可见 Key，或者对全 Mask 行单独处理。
+如果一整行都是 $-\infty$，Softmax 会出现未定义的 $0/0$，可能产生 NaN。Padding、序列切分和特殊 Token 逻辑需要保证每个有效 Query 至少存在一个可见 Key，或者对全 Mask 行单独处理。
 
 ### 4. 不要把 Attention Weight 当概率预测
 
@@ -587,7 +598,7 @@ softmax(x) = exp(x - max(x)) / sum(exp(x - max(x)))
 
 1. Q、K、V 来自哪里？
 2. 每个 Query 可以读取哪些 Key？
-3. 是否仍显式构造 `N × N` Score？
+3. 是否仍显式构造 $N\times N$ Score？
 4. 相似度仍是 Softmax Dot-Product 吗？
 5. 归一化是否改变？
 6. 因果场景怎样维护历史状态？

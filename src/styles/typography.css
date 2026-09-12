@@ -99,6 +99,22 @@
       @apply bg-muted/75 text-foreground rounded p-1 wrap-break-word before:content-none after:content-none;
     }
 
+    .katex {
+      color: var(--color-foreground);
+    }
+
+    .katex-display {
+      max-width: 100%;
+      margin-block: 1.5rem;
+      padding-block: 0.5rem;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .katex-display > .katex {
+      min-width: max-content;
+    }
+
     .astro-code code {
       @apply flex-[1_0_100%] bg-inherit p-0;
     }

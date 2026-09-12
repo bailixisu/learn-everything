@@ -3,6 +3,7 @@ title: "大模型基础（一）：Transformer 到底改变了什么？"
 description: "从序列建模难题出发，拆解 Transformer 的 Encoder–Decoder、Self-Attention、位置编码和残差路径，并建立现代 Transformer 变体的完整坐标系。"
 ogImage: "./01-transformer-foundations-assets/00-cover.webp"
 pubDatetime: 2026-09-12T01:10:00+08:00
+modDatetime: 2026-09-12T11:50:00+08:00
 featured: false
 draft: false
 type: knowledge
@@ -50,12 +51,12 @@ tags:
 早期 RNN、LSTM 和 GRU 的主干计算沿时间展开：
 
 ```text
-x₁ → h₁ → h₂ → h₃ → … → hₙ
+x1 → h1 → h2 → h3 → ... → hn
            ↑
-          x₂、x₃……依次进入
+          x2、x3 ... 依次进入
 ```
 
-这类结构并不是“不能理解长距离”，LSTM 正是为改善长期依赖而设计；问题在于，隐藏状态 `hₜ` 依赖 `hₜ₋₁`，训练中的时间步主链很难完全并行。两个相距很远的 Token 之间，也需要经过较长的状态传播路径。
+这类结构并不是“不能理解长距离”，LSTM 正是为改善长期依赖而设计；问题在于，隐藏状态 $h_t$ 依赖 $h_{t-1}$，训练中的时间步主链很难完全并行。两个相距很远的 Token 之间，也需要经过较长的状态传播路径。
 
 卷积序列模型可以并行，但固定大小的卷积核通常要堆叠多层，才能扩大感受野。
 
@@ -77,7 +78,7 @@ Transformer 采取另一种方案：
 | 一维卷积            | 在局部窗口内传播   | 可以并行       | 需要层数扩大感受野           |
 | 全局 Self-Attention | 任意位置直接交互   | 可以并行       | 注意力矩阵随序列长度二次增长 |
 
-> Transformer 没有让“序列问题”消失。它用全局交互和并行性，换来了 `n × n` 注意力矩阵的计算与存储压力。
+> Transformer 没有让“序列问题”消失。它用全局交互和并行性，换来了 $n\times n$ 注意力矩阵的计算与存储压力。
 
 ## 二、原始 Transformer 是一台怎样的机器
 
@@ -104,11 +105,11 @@ Token Vectors
 Positional Encoding
 ```
 
-如果嵌入维度为 `d_model`，长度为 `n`，输入张量可以写成：
+如果嵌入维度为 $d_{\text{model}}$，长度为 $n$，输入张量可以写成：
 
-```text
-X ∈ ℝⁿˣᵈ
-```
+$$
+X \in \mathbb{R}^{n \times d_{\text{model}}}
+$$
 
 原版 Transformer 使用正弦和余弦位置编码，将顺序信息加到 Token Embedding 上。原因很直接：Self-Attention 本身只看向量关系，如果不额外加入位置信息，打乱 Token 顺序不会像自然语言那样产生足够明确的结构差异。
 
@@ -126,9 +127,9 @@ Position-wise Feed-Forward Network
 
 原论文使用的是后来常被称为 **Post-Norm** 的形式：
 
-```text
-LayerNorm(x + Sublayer(x))
-```
+$$
+\operatorname{LayerNorm}\!\left(x + \operatorname{Sublayer}(x)\right)
+$$
 
 现代大模型常改为 Pre-Norm 或 RMSNorm，但那不是 2017 原版架构。区分“原始 Transformer”和“现代 LLM Transformer”非常重要。
 
@@ -165,17 +166,16 @@ Value：如果被选中，我实际提供什么信息
 
 矩阵形式为：
 
-```text
-Q = XWQ
-K = XWK
-V = XWV
-```
+$$
+Q=XW_Q,\quad K=XW_K,\quad V=XW_V
+$$
 
 Scaled Dot-Product Attention 为：
 
-```text
-Attention(Q, K, V) = softmax(QKᵀ / √dₖ)V
-```
+$$
+\operatorname{Attention}(Q,K,V)
+=\operatorname{softmax}\!\left(\frac{QK^{\top}}{\sqrt{d_k}}\right)V
+$$
 
 ![一次 Self-Attention 从 Query-Key 匹配到 Value 聚合的过程](./01-transformer-foundations-assets/02-attention-mechanism.svg)
 
@@ -185,33 +185,33 @@ _图 2：一次注意力计算的可视化。权重仅用于解释流程，不�
 
 ### 第一步：计算相关性
 
-```text
-QKᵀ
-```
+$$
+QK^{\top}
+$$
 
-第 `i` 个 Query 与第 `j` 个 Key 的点积，表示位置 `i` 对位置 `j` 的匹配分数。
+第 $i$ 个 Query 与第 $j$ 个 Key 的点积，表示位置 $i$ 对位置 $j$ 的匹配分数。
 
 ### 第二步：缩放
 
-```text
-QKᵀ / √dₖ
-```
+$$
+\frac{QK^{\top}}{\sqrt{d_k}}
+$$
 
-当 Key 维度增大时，点积的幅度也容易增大，使 Softmax 进入梯度很小的饱和区域。除以 `√dₖ` 用于控制分数尺度。
+当 Key 维度增大时，点积的幅度也容易增大，使 Softmax 进入梯度很小的饱和区域。除以 $\sqrt{d_k}$ 用于控制分数尺度。
 
 ### 第三步：归一化
 
-```text
-softmax(...)
-```
+$$
+\operatorname{softmax}(\cdot)
+$$
 
 每个 Query 对所有 Key 得到一组和为 1 的权重。
 
 ### 第四步：聚合 Value
 
-```text
-Attention Weights × V
-```
+$$
+A V
+$$
 
 输出不是复制某一个 Token，而是所有 Value 的加权组合。
 
@@ -221,21 +221,23 @@ Attention Weights × V
 
 一次 Attention 只有一套投影空间。Multi-Head Attention 将特征拆到多个子空间中分别计算：
 
-```text
-headᵢ = Attention(QWᵢQ, KWᵢK, VWᵢV)
-
-MultiHead(Q,K,V) = Concat(head₁, …, headₕ)WO
-```
+$$
+\begin{gathered}
+Q_i=QW_i^Q,\quad K_i=KW_i^K,\quad V_i=VW_i^V,\\
+\operatorname{head}_i=\operatorname{Attention}(Q_i,K_i,V_i),\\
+H_{\mathrm{cat}}
+=\operatorname{Concat}(\operatorname{head}_1,\ldots,\operatorname{head}_h),\\
+\operatorname{MultiHead}(Q,K,V)=H_{\mathrm{cat}}W^O.
+\end{gathered}
+$$
 
 直觉上，不同 Head 可以学习不同类型的关系，例如局部搭配、指代关系、结构边界或位置模式。但不能简单断言“某个 Head 永远等于某种语法关系”：Head 的功能是训练得到的，可能混合、冗余，也可能随层次变化。
 
 原论文的 Base 模型使用：
 
-```text
-d_model = 512
-h = 8
-每个 Head 的 dₖ = dᵥ = 64
-```
+$$
+d_{\text{model}}=512,\qquad h=8,\qquad d_k=d_v=64
+$$
 
 拼接 8 个 Head 后，维度重新回到 512。
 
@@ -243,9 +245,10 @@ h = 8
 
 Attention 的任务是**跨位置混合信息**。Feed-Forward Network 则对每个位置独立地做非线性特征变换：
 
-```text
-FFN(x) = max(0, xW₁ + b₁)W₂ + b₂
-```
+$$
+\operatorname{FFN}(x)
+=\max(0,xW_1+b_1)W_2+b_2
+$$
 
 原版使用 ReLU，内部维度从 `512` 扩展到 `2048` 再投影回来。
 
@@ -264,9 +267,9 @@ FFN：每个 Token 内部变换和提炼特征
 
 ### 残差连接
 
-```text
-x + Sublayer(x)
-```
+$$
+x+\operatorname{Sublayer}(x)
+$$
 
 它为信息和梯度提供直接通道，使子层不必每次重写完整表示。
 
@@ -366,7 +369,7 @@ Transformer-XL 引入 segment-level recurrence，让后一个片段复用前一�
 - Performer：使用随机特征近似 Softmax Attention；
 - Linear Transformer：使用核特征映射并改变矩阵乘法顺序。
 
-它们试图避免显式构造完整的 `n × n` 注意力矩阵，但近似假设、数值稳定性、因果计算方式和实际硬件效率各不相同。
+它们试图避免显式构造完整的 $n\times n$ 注意力矩阵，但近似假设、数值稳定性、因果计算方式和实际硬件效率各不相同。
 
 ### 路线 4：不改变数学结果，优化执行
 
@@ -399,39 +402,43 @@ Dense FFN → Mixture of Experts
 
 标准 Attention 的核心中间量是：
 
-```text
-QKᵀ ∈ ℝⁿˣⁿ
-```
+$$
+QK^{\top}\in\mathbb{R}^{n\times n}
+$$
 
-序列长度为 `n` 时，它显式描述每对 Token 的关系，因此时间和显存通常包含关于 `n²` 的项。
+序列长度为 $n$ 时，它显式描述每对 Token 的关系，因此时间和显存通常包含关于 $n^2$ 的项。
 
 Linear Attention 的一类典型思路是，把相似度写成可分解的核形式：
 
-```text
-sim(q, k) ≈ φ(q)ᵀφ(k)
-```
+$$
+\operatorname{sim}(q,k)\approx\phi(q)^{\top}\phi(k)
+$$
 
 忽略归一化项时，可以利用乘法结合律，将：
 
-```text
-(φ(Q)φ(K)ᵀ)V
-```
+$$
+\bigl(\phi(Q)\phi(K)^{\top}\bigr)V
+$$
 
 改写为：
 
-```text
-φ(Q)(φ(K)ᵀV)
-```
+$$
+\phi(Q)\bigl(\phi(K)^{\top}V\bigr)
+$$
 
 完整的归一化输出可以按位置写成：
 
-```text
-                φ(qᵢ)ᵀ Σⱼ φ(kⱼ)vⱼᵀ
-Attentionᵢ = ───────────────────────
-                   φ(qᵢ)ᵀ Σⱼ φ(kⱼ)
-```
+$$
+\operatorname{Attention}_i
+=
+\frac{
+  \phi(q_i)^{\top}\displaystyle\sum_j \phi(k_j)v_j^{\top}
+}{
+  \phi(q_i)^{\top}\displaystyle\sum_j \phi(k_j)
+}
+$$
 
-其中分子维护 Key–Value 的聚合状态，分母维护归一化状态；因果场景则只累计 `j ≤ i` 的前缀。这样就不必显式生成完整的 `n × n` Attention Matrix。在特征维度固定的分析下，计算可以随序列长度近似线性增长。
+其中分子维护 Key–Value 的聚合状态，分母维护归一化状态；因果场景则只累计 $j\le i$ 的前缀。这样就不必显式生成完整的 $n\times n$ Attention Matrix。在特征维度固定的分析下，计算可以随序列长度近似线性增长。
 
 但“线性”不代表无条件更好：
 
@@ -473,7 +480,7 @@ Transformer 的成功不能只归因于 Attention。至少有五个因素共同�
 
 ### 误区 3：Linear Transformer 就是把层换成线性层
 
-不是。“Linear”通常指序列长度维度的计算或内存复杂度接近线性，核心往往是避免显式构造 `n × n` 注意力矩阵。
+不是。“Linear”通常指序列长度维度的计算或内存复杂度接近线性，核心往往是避免显式构造 $n\times n$ 注意力矩阵。
 
 ### 误区 4：FlashAttention 是一种近似 Attention
 
@@ -515,7 +522,7 @@ Mask 与 Cross-Attention 决定数据流
 
 下一篇将只聚焦一个问题：
 
-> `QKᵀ / √dₖ` 为什么能够表示相关性，Mask、Softmax 和 Multi-Head 又分别改变了什么？
+> $QK^{\top}/\sqrt{d_k}$ 为什么能够表示相关性，Mask、Softmax 和 Multi-Head 又分别改变了什么？
 
 我们会用一个可以手算的小矩阵，从输入向量开始完整走完一次 Self-Attention。
 
