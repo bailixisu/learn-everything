@@ -3,7 +3,7 @@ title: "大模型基础（二）：Self-Attention 从张量到多头机制"
 description: "逐步拆解 Q、K、V 投影、缩放点积、Mask、Softmax、Value 聚合与 Multi-Head Attention，并用可手算案例解释训练和推理中的真实数据流。"
 ogImage: "./02-self-attention-deep-dive-assets/00-cover.webp"
 pubDatetime: 2026-09-12T01:50:00+08:00
-modDatetime: 2026-09-12T11:50:00+08:00
+modDatetime: 2026-09-12T12:05:00+08:00
 featured: false
 draft: false
 type: knowledge
@@ -446,18 +446,40 @@ $$
 H_Q=H,\qquad H_K=H_V=1
 $$
 
-Grouped-Query Attention（GQA）位于两者之间：
+Grouped-Query Attention（GQA，分组查询注意力）位于两者之间。设 Query Head 数量为 $H$，K/V Head 数量为 $G$，并假设 $H$ 能被 $G$ 整除，则每组包含 $R=H/G$ 个 Query Head：
 
 $$
 \begin{aligned}
-H_Q&=H,\qquad H_K=H_V=G,\\
-1&<G<H.
+H_Q&=H, & H_K=H_V&=G,\\
+R&=\frac{H}{G}, & 1&<G<H.
 \end{aligned}
 $$
 
-主要收益出现在自回归推理：K/V Head 更少意味着 KV Cache 更小、读取带宽更低。代价是共享程度增加可能影响模型质量，因此 GQA 常被用作质量与推理效率之间的折中。
+第 $h$ 个 Query Head 使用第 $g(h)$ 组的 Key 和 Value：
 
-> MQA/GQA 改变的是 Q Head 与 KV Head 的组织方式，不改变 Scaled Dot-Product Attention 的基本语义。
+$$
+\begin{aligned}
+g(h)&=\left\lceil\frac{h}{R}\right\rceil,\\
+\operatorname{head}_h
+&=\operatorname{Attention}\!\left(Q_h,K_{g(h)},V_{g(h)}\right),\\
+h&\in\{1,\ldots,H\}.
+\end{aligned}
+$$
+
+例如 $H=8$、$G=2$ 时，每四个 Query Head 共享一组 K/V：
+
+| Query Head | 使用的 K/V Head |
+| ---------- | --------------- |
+| 1–4        | 1               |
+| 5–8        | 2               |
+
+从这个定义可以看出，MHA 对应 $G=H$，MQA 对应 $G=1$，而通常所说的 GQA 取 $1<G<H$。
+
+> GQA 中的 Group 指“分组共享 K/V”，不是把组内 Query 或 Attention 输出做算术平均。全部 $H$ 个 Query Head 仍会分别产生输出，随后拼接并经过输出投影。
+
+在 Head Dimension 和序列长度相同的近似下，GQA 的 K/V Cache 规模约为 MHA 的 $G/H$。上面的 $H=8$、$G=2$ 示例只需保留约四分之一的 K/V Head 状态，因此能够降低自回归推理中的 Cache 容量和读取带宽。代价是更多 Query Head 共享 K/V 表示，所以 GQA 常被用作模型质量与推理效率之间的折中。
+
+> MQA/GQA 改变的是 Query Head 与 K/V Head 的组织方式，不改变 Scaled Dot-Product Attention 的基本语义。
 
 ## 十、训练和推理为什么不一样
 
