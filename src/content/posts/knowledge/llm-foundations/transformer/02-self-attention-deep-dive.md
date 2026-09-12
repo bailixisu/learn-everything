@@ -3,7 +3,7 @@ title: "大模型基础（二）：Self-Attention 从张量到多头机制"
 description: "逐步拆解 Q、K、V 投影、缩放点积、Mask、Softmax、Value 聚合与 Multi-Head Attention，并用可手算案例解释训练和推理中的真实数据流。"
 ogImage: "./02-self-attention-deep-dive-assets/00-cover.webp"
 pubDatetime: 2026-09-12T01:50:00+08:00
-modDatetime: 2026-09-12T12:05:00+08:00
+modDatetime: 2026-09-12T12:17:00+08:00
 featured: false
 draft: false
 type: knowledge
@@ -480,12 +480,18 @@ $$
 在 Head Dimension 和序列长度相同的近似下，GQA 的 K/V Cache 规模约为 MHA 的 $G/H$。上面的 $H=8$、$G=2$ 示例只需保留约四分之一的 K/V Head 状态，因此能够降低自回归推理中的 Cache 容量和读取带宽。代价是更多 Query Head 共享 K/V 表示，所以 GQA 常被用作模型质量与推理效率之间的折中。
 
 > MQA/GQA 改变的是 Query Head 与 K/V Head 的组织方式，不改变 Scaled Dot-Product Attention 的基本语义。
-```
+
+### 一个可运行的 GQA 教学实现
+
+下面用 PyTorch 实现前面的 $H=8$、$G=2$ 示例。为了让分组关系直观可见，代码先生成 2 组 K/V，再把每组显式分配给 4 个 Query Head：
+
+```python
 import torch
 from torch import nn
 
 B, T, D = 2, 5, 512
 Hq, Hkv, d = 8, 2, 64
+assert Hq % Hkv == 0
 
 x = torch.randn(B, T, D)
 
@@ -495,28 +501,34 @@ k_proj = nn.Linear(D, Hkv * d, bias=False)
 v_proj = nn.Linear(D, Hkv * d, bias=False)
 o_proj = nn.Linear(Hq * d, D, bias=False)
 
-# 线性投影 → 拆头 → 将头维度移到前面
+# 线性投影 → 拆头 → 将 Head 维度移到前面
 q = q_proj(x).reshape(B, T, Hq, d).transpose(1, 2)
 k = k_proj(x).reshape(B, T, Hkv, d).transpose(1, 2)
 v = v_proj(x).reshape(B, T, Hkv, d).transpose(1, 2)
-# q: [2,8,5,64]；k、v: [2,2,5,64]
+# q: [2, 8, 5, 64]；k、v: [2, 2, 5, 64]
 
-# 教学实现：显式重复共享的 KV 头
-k_exp = k.repeat_interleave(Hq // Hkv, dim=1)
-v_exp = v.repeat_interleave(Hq // Hkv, dim=1)
-# k_exp、v_exp: [2,8,5,64]
+# 教学实现：显式重复共享的 K/V Head
+repeats = Hq // Hkv
+k_exp = k.repeat_interleave(repeats, dim=1)
+v_exp = v.repeat_interleave(repeats, dim=1)
+# k_exp、v_exp: [2, 8, 5, 64]
 
-scores = (q @ k_exp.transpose(-2, -1)) / (d ** 0.5)
-# scores: [2,8,5,5]
+scores = (q @ k_exp.transpose(-2, -1)) / (d**0.5)
+# scores: [2, 8, 5, 5]
 
-# 因果 mask：屏蔽未来位置
-future_mask = torch.ones(T, T, dtype=torch.bool).triu(1)
+# Causal Mask：屏蔽未来位置
+future_mask = torch.ones(T, T, dtype=torch.bool, device=x.device).triu(1)
 scores = scores.masked_fill(future_mask, float("-inf"))
 
-attn = scores.softmax(dim=-1)              # [2,8,5,5]
-out = attn @ v_exp                          # [2,8,5,64]
+attn = torch.softmax(scores, dim=-1)  # [2, 8, 5, 5]
+out = attn @ v_exp  # [2, 8, 5, 64]
 out = out.transpose(1, 2).reshape(B, T, Hq * d)
-y = o_proj(out)                            # [2,5,512]```
+y = o_proj(out)  # [2, 5, 512]
+```
+
+这段实现中，真正投影并需要长期缓存的 K/V 仍然只有 2 个 Head；`repeat_interleave` 只是为了用普通批量矩阵乘法清楚展示共享关系。
+
+> 生产级 GQA Kernel 通常不会像这个教学版本一样物化重复后的 `k_exp` 和 `v_exp`，否则会增加临时内存与带宽开销，削弱分组共享带来的收益。
 
 ## 十、训练和推理为什么不一样
 
