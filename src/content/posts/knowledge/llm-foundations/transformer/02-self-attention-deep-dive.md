@@ -480,6 +480,43 @@ $$
 在 Head Dimension 和序列长度相同的近似下，GQA 的 K/V Cache 规模约为 MHA 的 $G/H$。上面的 $H=8$、$G=2$ 示例只需保留约四分之一的 K/V Head 状态，因此能够降低自回归推理中的 Cache 容量和读取带宽。代价是更多 Query Head 共享 K/V 表示，所以 GQA 常被用作模型质量与推理效率之间的折中。
 
 > MQA/GQA 改变的是 Query Head 与 K/V Head 的组织方式，不改变 Scaled Dot-Product Attention 的基本语义。
+```
+import torch
+from torch import nn
+
+B, T, D = 2, 5, 512
+Hq, Hkv, d = 8, 2, 64
+
+x = torch.randn(B, T, D)
+
+# nn.Linear(in_features, out_features)
+q_proj = nn.Linear(D, Hq * d, bias=False)
+k_proj = nn.Linear(D, Hkv * d, bias=False)
+v_proj = nn.Linear(D, Hkv * d, bias=False)
+o_proj = nn.Linear(Hq * d, D, bias=False)
+
+# 线性投影 → 拆头 → 将头维度移到前面
+q = q_proj(x).reshape(B, T, Hq, d).transpose(1, 2)
+k = k_proj(x).reshape(B, T, Hkv, d).transpose(1, 2)
+v = v_proj(x).reshape(B, T, Hkv, d).transpose(1, 2)
+# q: [2,8,5,64]；k、v: [2,2,5,64]
+
+# 教学实现：显式重复共享的 KV 头
+k_exp = k.repeat_interleave(Hq // Hkv, dim=1)
+v_exp = v.repeat_interleave(Hq // Hkv, dim=1)
+# k_exp、v_exp: [2,8,5,64]
+
+scores = (q @ k_exp.transpose(-2, -1)) / (d ** 0.5)
+# scores: [2,8,5,5]
+
+# 因果 mask：屏蔽未来位置
+future_mask = torch.ones(T, T, dtype=torch.bool).triu(1)
+scores = scores.masked_fill(future_mask, float("-inf"))
+
+attn = scores.softmax(dim=-1)              # [2,8,5,5]
+out = attn @ v_exp                          # [2,8,5,64]
+out = out.transpose(1, 2).reshape(B, T, Hq * d)
+y = o_proj(out)                            # [2,5,512]```
 
 ## 十、训练和推理为什么不一样
 
