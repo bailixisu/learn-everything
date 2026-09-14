@@ -4,7 +4,7 @@
 >
 > 系列名称：`大模型基础：Transformer 与现代 LLM`
 >
-> 当前状态：规划完成，前两篇已发布；其余文章仍需完成草稿、评审与人工发布确认。
+> 当前状态：第 1、2、6 篇已发布；其余文章仍需完成草稿、评审与用户发布确认。
 
 ## 系列要回答的问题
 
@@ -19,20 +19,20 @@
 
 ## 文章规划
 
-| 序号 | 文章                              | 核心问题                                                             | 关键视觉                                  |
-| ---- | --------------------------------- | -------------------------------------------------------------------- | ----------------------------------------- |
-| 1    | Transformer 到底改变了什么        | 原始架构、数据流、Attention 与变体地图                               | 总体架构、一次注意力计算、家族地图        |
-| 2    | Self-Attention 从公式到直觉       | Q/K/V、缩放、Mask、多头机制                                          | 向量计算分解、Attention 热力图、Mask 对比 |
-| 3    | 位置从哪里来                      | 正弦位置编码、相对位置、RoPE、ALiBi                                  | 旋转几何、相对距离对比                    |
-| 4    | Encoder、Decoder 与三大家族       | BERT、GPT、T5 的结构与训练目标                                       | 三路数据流、可见性矩阵                    |
-| 5    | 现代 LLM 的 Transformer 积木      | Pre-Norm、RMSNorm、SwiGLU、RoPE、MQA/GQA                             | 2017 与现代 Decoder 对照剖面              |
-| 6    | 高效 Attention 全景               | 局部、稀疏、低秩、哈希、递归、IO 优化                                | 方法坐标系、复杂度与信息路径              |
-| 7    | Linear Transformer                | 核技巧、计算顺序、因果前缀状态、局限                                 | 二次矩阵与线性状态流对照                  |
-| 8    | 长上下文工程                      | Transformer-XL、Longformer、Reformer、FlashAttention、PagedAttention | 长上下文技术栈与显存账本                  |
-| 9    | MoE 与模型容量扩展                | Router、专家并行、负载均衡、容量与计算量                             | Token 路由和容量/成本曲线                 |
-| 10   | 从预训练到对齐                    | Next-token、SFT、偏好优化、评测边界                                  | 数据与目标函数流水线                      |
-| 11   | 推理时发生了什么                  | Prefill、Decode、KV Cache、采样、量化                                | 请求生命周期、KV Cache 增长图             |
-| 12   | 手写一个可验证的 Mini Transformer | 最小实现、形状检查、训练实验、注意力可视化                           | 实验输出与参数流追踪                      |
+| 序号 | 文章                                                                                              | 核心问题                                                             | 关键视觉                                  |
+| ---- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ----------------------------------------- |
+| 1    | Transformer 到底改变了什么                                                                        | 原始架构、数据流、Attention 与变体地图                               | 总体架构、一次注意力计算、家族地图        |
+| 2    | Self-Attention 从公式到直觉                                                                       | Q/K/V、缩放、Mask、多头机制                                          | 向量计算分解、Attention 热力图、Mask 对比 |
+| 3    | 位置从哪里来                                                                                      | 正弦位置编码、相对位置、RoPE、ALiBi                                  | 旋转几何、相对距离对比                    |
+| 4    | Encoder、Decoder 与三大家族                                                                       | BERT、GPT、T5 的结构与训练目标                                       | 三路数据流、可见性矩阵                    |
+| 5    | 现代 LLM 的 Transformer 积木                                                                      | Pre-Norm、RMSNorm、SwiGLU、RoPE、MQA/GQA                             | 2017 与现代 Decoder 对照剖面              |
+| 6    | [高效 Attention 变体：从稀疏、低秩到线性注意力](./transformer/06-efficient-attention-variants.md) | 稀疏、低秩、核线性、门控、Delta 更新与 IO 优化                       | 方法坐标系、矩阵重排与复杂度对照          |
+| 7    | Linear Transformer                                                                                | 核技巧、计算顺序、因果前缀状态、局限                                 | 二次矩阵与线性状态流对照                  |
+| 8    | 长上下文工程                                                                                      | Transformer-XL、Longformer、Reformer、FlashAttention、PagedAttention | 长上下文技术栈与显存账本                  |
+| 9    | MoE 与模型容量扩展                                                                                | Router、专家并行、负载均衡、容量与计算量                             | Token 路由和容量/成本曲线                 |
+| 10   | 从预训练到对齐                                                                                    | Next-token、SFT、偏好优化、评测边界                                  | 数据与目标函数流水线                      |
+| 11   | 推理时发生了什么                                                                                  | Prefill、Decode、KV Cache、采样、量化                                | 请求生命周期、KV Cache 增长图             |
+| 12   | 手写一个可验证的 Mini Transformer                                                                 | 最小实现、形状检查、训练实验、注意力可视化                           | 实验输出与参数流追踪                      |
 
 ## 视觉标准
 
