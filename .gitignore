@@ -32,3 +32,7 @@ public/pagefind
 
 # docker compose
 compose.override.yaml
+
+# local agent state and research notes (may contain full-text paper copies)
+.planning/
+.claude/
