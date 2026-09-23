@@ -26,7 +26,7 @@ tags:
 7. 锁定方案后只评估一次测试集；
 8. 将原始数据到预测结果的处理链一起保存，并监控上线后的数据和效果。
 
-![防止数据泄漏的传统机器学习流程：从问题定义、限定为模式与固定规则的初审和切分，到仅在训练与交叉验证内完成清洗、特征工程、训练和调参，最后进行一次测试并部署监控](./traditional-machine-learning-feature-engineering-workflow-assets/leakage-safe-ml-workflow.png)
+![防止数据泄漏的传统机器学习流程：从问题定义、限定为模式与固定规则的初审和切分，到仅在训练与交叉验证内完成清洗、特征工程、训练和调参，最后进行一次测试并部署监控](./traditional-machine-learning-feature-engineering-workflow-assets/leakage-safe-ml-workflow.webp)
 
 _图 1：虚线是关键边界。切分前的 Initial Audit 只检查 schema 与固定规则；缺失率、分布、标签关联、离群阈值等探索应在留出测试集后，只对训练数据进行。任何需要从数据中学习的步骤都只能在训练折内 `fit`，最终测试集只使用一次。对延迟标签，还必须保证训练样本的标签在每次拟合时已经成熟。_
 

@@ -51,7 +51,7 @@ tags:
 
 ## 3. 一次输入的实际调用链
 
-![一次输入经过 Inbox、pre-step、模型和工具，形成多步执行的流程图](./runtime-and-state-assets/turn-and-tools.png)
+![一次输入经过 Inbox、pre-step、模型和工具，形成多步执行的流程图](./runtime-and-state-assets/turn-and-tools.webp)
 
 图 2：展示正常路径。图中省略请求错误恢复、`agent/turn-stopping` 和取消分支；正文补充这些细节。
 
@@ -182,7 +182,7 @@ Token 计量也不总是精确 tokenizer：缺少可复用的提供方 usage 时
 
 ## 6. Session：事实日志、模型视图、磁盘持久化
 
-![Session 事件经过历史派生、UI 投影和持久化形成不同视图，压缩保留原始日志](./runtime-and-state-assets/state-and-context.png)
+![Session 事件经过历史派生、UI 投影和持久化形成不同视图，压缩保留原始日志](./runtime-and-state-assets/state-and-context.webp)
 
 图 3：箭头表示派生或消费关系。Attachment 和 Spill 的实体另行保存，日志可以携带它们的引用；独立存储并不表示业务上毫无关联。
 

@@ -19,7 +19,7 @@ tags:
 
 ## 1. 执行能力与编排能力的全景
 
-![文件与进程服务的本地和远端实现，以及 Todo、Goal、Subagent、Workflow、Schedule 的职责比较](./tools-and-orchestration-assets/execution-and-orchestration.png)
+![文件与进程服务的本地和远端实现，以及 Todo、Goal、Subagent、Workflow、Schedule 的职责比较](./tools-and-orchestration-assets/execution-and-orchestration.webp)
 
 图 4：左侧比较同一接口的不同执行环境，右侧比较任务组织方式。它们解决不同层次的问题；能记录目标，不表示一定要创建子 Agent，能后台执行也不表示具备持久任务队列。
 

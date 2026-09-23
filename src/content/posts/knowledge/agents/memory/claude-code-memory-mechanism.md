@@ -32,7 +32,7 @@ tags:
 | JSONL 会话记录          | Claude Code 自动记录           | 消息、工具调用、工具结果                                  | `--resume` 或 `--continue` 恢复会话时使用   | 受会话保留策略影响                        |
 | 上下文压缩              | Claude Code 在当前长会话中处理 | 对旧对话的摘要                                            | 压缩后替代部分旧上下文                      | 服务于当前会话预算，不等于长期记忆        |
 
-![Claude Code 中持久指令、自动记忆、会话记录与上下文压缩汇入当前上下文的分层图](./claude-code-memory-mechanism-assets/01-memory-layers.png)
+![Claude Code 中持久指令、自动记忆、会话记录与上下文压缩汇入当前上下文的分层图](./claude-code-memory-mechanism-assets/01-memory-layers.webp)
 
 图中最重要的分界在底部：**磁盘文件、一次请求的上下文和模型参数不是同一层**。把偏好写进 Markdown，并不意味着模型参数被更新；新会话之所以“记得”，是因为相关文件又被读取，其文本重新出现在模型可见的上下文中。
 
@@ -65,7 +65,7 @@ paths:
 
 `@path/to/file` import 能把大型指令按文件组织，默认最多递归四层；但导入内容仍会随引用它的 `CLAUDE.md` 在启动时进入上下文。因此，**import 改善可维护性，却不降低启动上下文成本**。若目标是减少常驻内容，应使用 path-scoped rules 或按需加载的 skill，而不是仅仅拆文件。
 
-![会话启动与工作过程中不同记忆来源的加载时机](./claude-code-memory-mechanism-assets/02-loading.png)
+![会话启动与工作过程中不同记忆来源的加载时机](./claude-code-memory-mechanism-assets/02-loading.webp)
 
 图中的指令来源包含组织、用户、项目和本地作用域；其中项目目录层级按当前目录及祖先目录发现，子目录指令在工作过程中按需加载。
 
@@ -162,7 +162,7 @@ when_future_task_needs_detail(index_entry):
     context.add(detail)
 ```
 
-![自动记忆的三项筛选条件，以及主题文件、索引和后续读取之间的关系](./claude-code-memory-mechanism-assets/03-writing.png)
+![自动记忆的三项筛选条件，以及主题文件、索引和后续读取之间的关系](./claude-code-memory-mechanism-assets/03-writing.webp)
 
 这个解释模型突出三项条件：无法由代码或 Git 推导、`CLAUDE.md` 尚未记录、未来会话可能有用。图与伪代码表示概念职责，不代表内部必须按固定顺序执行，也不意味着主题文件与索引更新是原子事务。排障时应查看实际 Markdown 与当前加载结果。
 
@@ -184,7 +184,7 @@ when_future_task_needs_detail(index_entry):
 
 [官方 memory 排障说明](https://code.claude.com/docs/en/memory#instructions-seem-lost-after-compact)指出，项目根 `CLAUDE.md` 在压缩后会从磁盘重读并重新注入。子目录 `CLAUDE.md` 和带 `paths` 的条件规则，则要等 Claude 再次读取适用文件后重新加载。只在对话里说过、没有持久化的要求，仍可能在摘要过程中丢失。
 
-![新会话、恢复已有会话与上下文压缩的边界对照](./claude-code-memory-mechanism-assets/04-session-boundaries.png)
+![新会话、恢复已有会话与上下文压缩的边界对照](./claude-code-memory-mechanism-assets/04-session-boundaries.webp)
 
 ### 两套保留策略
 
@@ -272,7 +272,7 @@ memory: project
 
 [Hooks 文档](https://code.claude.com/docs/en/hooks)中的 `SessionStart`、`PreCompact`、`PostCompact` 由会话启动或恢复、压缩前、压缩后等生命周期事件触发，不是每日时钟。[`/loop` 与 scheduled tasks](https://code.claude.com/docs/en/scheduled-tasks)默认也是会话级任务：只在 Claude Code 运行且空闲时触发；新会话会清除会话级任务，恢复会话时也只有满足条件的任务可以恢复。
 
-![Claude Code 原生选择性记忆与自建每日归档扩展的区别](./claude-code-memory-mechanism-assets/05-daily-extension.png)
+![Claude Code 原生选择性记忆与自建每日归档扩展的区别](./claude-code-memory-mechanism-assets/05-daily-extension.webp)
 
 如果确实需要每日归档，应把它当作独立数据管道，并至少处理以下问题：
 

@@ -51,7 +51,7 @@ DeepSeek Harness（命令名 `dsh`）解决的是：**怎样把一个会调用�
 
 ## 1. 整体架构
 
-![DeepSeek Harness 从入口、Agent 主干、能力插件到持久状态的分层关系](./project-overview-assets/architecture.png)
+![DeepSeek Harness 从入口、Agent 主干、能力插件到持久状态的分层关系](./project-overview-assets/architecture.webp)
 
 图 1：上层入口共享 Agent 服务；工具经统一流水线调用能力。Cordis 管理这些插件的服务依赖与生命周期。非会话 Storage 和 Session Event Log 分别保存不同性质的数据。
 

@@ -103,7 +103,7 @@ MCP 进一步区分三种服务端原语：**Prompt** 是预定义模板，**Res
 - 审批、暂停、恢复和错误事件；
 - 流式片段、最终响应和运行指标。
 
-![Tool、Skill 与 MCP 能力在控制平面发布，并由数据平面按请求装配和执行](./ai-agent-message-tools-skills-workflow-assets/diagram-flow-92804f5f886a.png)
+![Tool、Skill 与 MCP 能力在控制平面发布，并由数据平面按请求装配和执行](./ai-agent-message-tools-skills-workflow-assets/diagram-flow-92804f5f886a.webp)
 
 _图 1：控制平面管理 Tool/Skill 定义、版本与权限；数据平面处理每次请求。MCP Server 提供的 Prompt、Resource 与 Tool 仍须经过 Host 的安全边界。_
 

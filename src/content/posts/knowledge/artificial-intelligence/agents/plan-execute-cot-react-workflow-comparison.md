@@ -39,7 +39,7 @@ tags:
 
 ## 一张图看懂四种控制流
 
-![CoT、ReAct、Plan-and-Execute 与 Workflow 的控制流对照](./plan-execute-cot-react-workflow-comparison-assets/four-pattern-control-flow.png)
+![CoT、ReAct、Plan-and-Execute 与 Workflow 的控制流对照](./plan-execute-cot-react-workflow-comparison-assets/four-pattern-control-flow.webp)
 
 _图 1：四种模式的关键差异在于谁决定下一步、路径何时形成，以及是否依据环境反馈动态调整。底部关系也很重要：Workflow 可以容纳另外三种模式，而 Plan-and-Execute 的 Executor 可以采用 ReAct。_
 
