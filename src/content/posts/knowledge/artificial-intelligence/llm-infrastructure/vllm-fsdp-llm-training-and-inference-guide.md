@@ -25,7 +25,7 @@ tags:
 - **vLLM 主要解决推理与在线服务问题**：更高效地管理 KV Cache，把长度和到达时间不同的请求持续装入 GPU，并提供服务接口。
 - 二者通常不在同一个进程里协作。训练结束后，需将训练检查点整理成推理引擎可读取的模型目录，再启动 vLLM。
 
-![数据经过分词和批处理进入 FSDP 训练，产出分片检查点并转换为模型资产，随后由 vLLM 提供在线推理服务](./vllm-fsdp-llm-training-and-inference-guide-assets/diagram-flow-3459c889e103.png)
+![数据经过分词和批处理进入 FSDP 训练，产出分片检查点并转换为模型资产，随后由 vLLM 提供在线推理服务](./vllm-fsdp-llm-training-and-inference-guide-assets/diagram-flow-3459c889e103.webp)
 
 _图 1：左侧主流程是 Data → Tokenize/Data loader → Batch → FSDP training；预训练、SFT 和偏好对齐是训练容器内的阶段或目标。各 GPU 常驻模型状态分片，按层临时 all-gather 参数，并在反向后 reduce-scatter 梯度。中间由分片训练检查点经 Merge/Convert 形成权重、配置与 tokenizer 等可部署资产，并交给服务侧的 vLLM Engine 加载；客户端请求经 OpenAI 兼容 API 进入引擎，调度器执行连续批处理并分页管理 KV Cache。图中通信时间线经过简化，反向前是否再次 all-gather 取决于重分片策略。_
 

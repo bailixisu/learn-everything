@@ -80,7 +80,7 @@ $$
 
 它在梯度方差和硬件吞吐之间折中。深度学习实践里人们说“SGD”，通常就是 mini-batch SGD，而不是一次一个样本。增大批量一般会降低梯度噪声并提高并行度，但也增加显存占用；学习率、训练步数和泛化行为往往需要一起重调。
 
-![狭长损失谷中 mini-batch SGD、Momentum 与 Adam 的概念性更新轨迹](./gradient-descent-optimizers-and-gradient-boosting-assets/optimizer-trajectories.png)
+![狭长损失谷中 mini-batch SGD、Momentum 与 Adam 的概念性更新轨迹](./gradient-descent-optimizers-and-gradient-boosting-assets/optimizer-trajectories.webp)
 
 _图 1：统一二维损失地形上的概念示意，不是性能实测。SGD 的批量噪声带来锯齿；Momentum 累积一致方向并抑制横向摆动；Adam 还会按坐标缩放步长。真实结果并不保证 Adam 的路径总是最短。_
 
@@ -176,7 +176,7 @@ $m_t$ 回答“近期总体朝哪走”，$v_t$ 回答“这个坐标近期波�
 
 Adam 为每个参数保存 $m_t$、$v_t$ 两份状态，额外内存约 $2P$ 个状态元素；实际峰值还取决于框架实现。PyTorch 文档也提醒，`foreach` 实现可能因中间 tensor list 使用更多峰值内存。主要超参数是 $\eta,\beta_1,\beta_2,\epsilon$。
 
-![Momentum、RMSProp 与 Adam 的一阶矩和二阶矩数据流](./gradient-descent-optimizers-and-gradient-boosting-assets/diagram-flow-a376babd1f9d.png)
+![Momentum、RMSProp 与 Adam 的一阶矩和二阶矩数据流](./gradient-descent-optimizers-and-gradient-boosting-assets/diagram-flow-a376babd1f9d.webp)
 
 _图 2：Momentum 平滑梯度方向，RMSProp 用近期平方梯度缩放坐标；Adam 合并两条数据流并修正零初始化偏差。图中的 moment 是梯度统计量，不是损失函数的高阶导数。_
 
@@ -327,7 +327,7 @@ $$
 
 然后拟合 $h_t(x)\approx r_{it}$，再把它加回已有模型。之所以叫“伪残差”，是因为只有平方误差下它才与普通残差成比例：若 $\ell=\frac12(y-F)^2$，则 $r=y-F$。二分类常用对数损失，此时负梯度与“真实标签减当前概率”相关，而不是原始标签本身。
 
-![梯度提升逐轮计算负梯度、拟合弱树并累加到集成的流程](./gradient-descent-optimizers-and-gradient-boosting-assets/diagram-flow-f18b7932a100.png)
+![梯度提升逐轮计算负梯度、拟合弱树并累加到集成的流程](./gradient-descent-optimizers-and-gradient-boosting-assets/diagram-flow-f18b7932a100.webp)
 
 _图 3：每棵新树拟合当前模型仍未解释的负梯度/残差，再乘学习率加入集成。训练标签没有改变，改变的是每轮树要逼近的工作目标。_
 
@@ -424,7 +424,7 @@ LightGBM 先把连续特征离散到有限 bins，以梯度和 Hessian 的直方
 
 代价是这些有序统计和排列会增加实现复杂度与一定计算开销。它尤其适合类别列多、基数高且不希望手工 target encoding 的任务，但仍需正确声明类别列，并严格划分训练、验证和时间窗口。
 
-![XGBoost、LightGBM 与 CatBoost 的主要设计侧重点](./gradient-descent-optimizers-and-gradient-boosting-assets/boosting-family-map.png)
+![XGBoost、LightGBM 与 CatBoost 的主要设计侧重点](./gradient-descent-optimizers-and-gradient-boosting-assets/boosting-family-map.webp)
 
 _图 4：三者都属于加法提升树，差异主要在目标近似、分裂与建树工程、类别特征处理等侧重点；图中不是性能排名。_
 
