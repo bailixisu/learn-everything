@@ -4,7 +4,7 @@ description:
   深入拆解 Qwen3-VL 的视觉编码器、MLP 连接器、DeepStack、位置编码与训练流程，并核对截至 2026-09-26 的
   Qwen3.8-Next、Omni 最新公开报告，附论文与 PDF 入口。
 pubDatetime: 2026-09-26T16:57:21.352Z
-modDatetime: 2026-09-27T13:14:00+08:00
+modDatetime: 2026-09-27T08:49:44.107Z
 featured: false
 draft: false
 type: knowledge
@@ -26,7 +26,7 @@ tags:
 | -------------------------------------- | -------------------- | ------------------------------------------------------------- |
 | 原始 Qwen-VL，2023                     | 起点                 | 理解视觉编码器、位置感知适配器与语言模型的分工                |
 | Qwen2-VL、Qwen2.5-VL，2024—2025        | 关键演进             | 理解动态分辨率、图像与视频统一处理、空间与时间编码            |
-| Qwen3-VL，报告于 2025-11 发布          | **VL 架构深读主线**  | 本次检索中，仍以 Qwen-VL 系列命名且具备完整技术报告的最新一代 |
+| Qwen3-VL，报告于 2025-11 发布          | **VL 架构深读主线**  | 截至检索日，仍以 Qwen-VL 系列命名且具备完整技术报告的最新一代 |
 | Qwen3.5、Qwen3.8，2026                 | 更新的统一多模态主线 | 不能因名称不带 VL，就忽略其视觉能力与架构变化                 |
 | Qwen3.8-Next、Qwen3.8-Omni，2026-08—09 | 最新报告补充         | 分别解释高效混合骨干，以及音视频统一理解和智能体工作流        |
 
@@ -284,7 +284,7 @@ QSA 的训练也不是直接把稠密注意力删掉：先用完整注意力分�
 
 ### Qwen3.8-Omni：多了音频路径，也多了按需获取证据的训练
 
-本次读取的更新报告 [Qwen3.8-Omni: Towards Native Omni-Modal Agents](https://arxiv.org/html/2609.25611v1)采用 Thinker–Talker 家族架构。理解侧的 Thinker 接收：
+最新报告 [Qwen3.8-Omni: Towards Native Omni-Modal Agents](https://arxiv.org/html/2609.25611v1)采用 Thinker–Talker 家族架构。理解侧的 Thinker 接收：
 
 - 视觉编码器处理的图片和采样视频帧；
 - AuT 编码器处理的一般音频；
@@ -331,5 +331,3 @@ Qwen3-VL 适合讨论的典型任务包括文档问答、图表解释、多图�
 | Qwen3.8-Omni，2026 | [报告](https://arxiv.org/abs/2609.25611) · [PDF](https://arxiv.org/pdf/2609.25611)           | 报告配套的 [Qwen-MM-Plugins](https://github.com/QwenLM/Qwen-MM-Plugins) 与 [Qwen-Live-Harness](https://github.com/QwenLM/Qwen-Live-Harness) |
 
 历史 GitHub 入口可能跳转到更新仓库，研究某一代时应以对应论文版本为准。插件和交互框架的开源，也不等同于对应模型权重全部开放。
-
-**资料获取说明：**本次已读取并保存用于写作的网页文本快照，提供了公开 PDF 入口；没有将 PDF 二进制文件下载到素材目录，也没有运行模型或性能测试。正文引用 Qwen3-VL 报告 Figure 1 原图并注明出处（版权归原作者），另配两张依据报告自行绘制的架构示意图。
