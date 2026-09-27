@@ -4,6 +4,7 @@ description:
   深入拆解 Qwen3-VL 的视觉编码器、MLP 连接器、DeepStack、位置编码与训练流程，并核对截至 2026-09-26 的
   Qwen3.8-Next、Omni 最新公开报告，附论文与 PDF 入口。
 pubDatetime: 2026-09-26T16:57:21.352Z
+modDatetime: 2026-09-27T13:14:00+08:00
 featured: false
 draft: false
 type: knowledge
@@ -75,11 +76,15 @@ ViT 输出的不是“已经识别出来的汉字列表”，而是一组包含�
 
 ## 三、Qwen3-VL 的详细架构：主路径加一组视觉旁路
 
+![Qwen3-VL 论文整体框架：动态视觉输入、多模态序列与 DeepStack 跨层注入](./qwen-vl-architecture-and-innovations-assets/qwen3-vl-paper-framework.webp)
+
+图源：Qwen3-VL Technical Report，Figure 1（[报告原文](https://arxiv.org/html/2511.21631v2)）。重点看视觉编码器到多模态序列的主路径、右侧 DeepStack 跨层注入，以及视频帧表示前的文本时间戳；位置编码机制结合下文阅读。原图版权归原作者所有，此处仅作学习引用。
+
+![Qwen3-VL 主数据流：视觉编码与文本嵌入汇入多模态序列，再由 Qwen3 解码](./qwen-vl-architecture-and-innovations-assets/diagram-flow-bb690bab5557.webp)
+
+主数据流示意图，依据 Qwen3-VL 报告 §2、Figure 1 绘制，非论文原图。绿色区域归纳视觉侧处理及 merger 输出接口，紫色区域为语言侧；文本不经过 ViT，视频时间戳以文本嵌入置于对应视频时间 patch 前。Interleaved MRoPE 是解码器内部机制，DeepStack 旁路另见下图。
+
 [Qwen3-VL 报告 §2 与 Figure 1](https://arxiv.org/html/2511.21631v2)仍采用三个主体：**视觉编码器、基于 MLP 的视觉语言 merger、Qwen3 语言模型**。变化在于视觉特征怎样编码、怎样注入，以及位置与时间怎样表示。
-
-![Qwen3-VL 主路径：图像或视频经动态预处理、SigLIP-2 ViT 和 MLP merger，与独立文本嵌入组成序列，进入 Qwen3 解码器生成文本](./qwen-vl-architecture-and-innovations-assets/diagram-flow-1d15df8e524a.png)
-
-图 1：作者依据 [Qwen3-VL 报告 §2、Figure 1](https://arxiv.org/html/2511.21631v2)绘制的辅助示意，非论文原图。文本不经过视觉编码器；视频时间戳作为文本嵌入，在序列中放到对应视频时间 patch 前。Interleaved MRoPE 是解码器的位置机制，不是额外推理阶段。为避免线路拥挤，DeepStack 旁路单独见图 2。
 
 ### 1. 视觉编码器：SigLIP-2 初始化与动态分辨率适配
 
@@ -134,9 +139,9 @@ MoE 的核心是稀疏选择专家参与计算，并不表示“图片交给视�
 - **主路径**：最终视觉特征经 merger 形成输入视觉序列；
 - **旁路**：三个层级的视觉特征经各自 merger，对早期语言层进行补充。
 
-![DeepStack 三条旁路：ViT 三个深度的特征经各自专用 merger，分别残差相加到前三个语言层的视觉位置，语言隐藏状态仍逐层传递](./qwen-vl-architecture-and-innovations-assets/diagram-flow-4a287d85a372.png)
+![DeepStack 旁路：同一 ViT 的三层特征经独立 merger，分别残差加到前三个语言层的视觉位置](./qwen-vl-architecture-and-innovations-assets/diagram-flow-d0375e98d4c3.webp)
 
-图 2：作者依据[报告 §2.2、Figure 1](https://arxiv.org/html/2511.21631v2)绘制的 DeepStack 辅助示意，非论文原图。A、B、C 表示同一 ViT 的三个不同深度，不是三个独立编码器；每个特征框内注明其独立 merger。标为 `residual +` 的边表示在对应视觉位置相加，`hidden states` 表示语言层间传递。图 1 的输入序列进入第 1 层，第 3 层后继续经过其余语言层；旁路不拼接额外 token，也不是 cross-attention。
+DeepStack 示意图，依据 Qwen3-VL 报告 §2.2、Figure 1 绘制，非论文原图。A/B/C 表示同一 ViT 由浅到深的三个特征抽取位置，不是三个编码器；各自的 merger 分别对应 LLM 第 1/2/3 层。语言层方框包含该层计算及其后的视觉位置残差加法（residual +），不是拼接或 cross-attention；隐藏状态沿语言主线继续传递，不增加序列长度。
 
 这样不增加视觉序列长度，但会增加相应的投影与融合计算。其动机是避免所有视觉信息只能经过单一末端表示进入语言模型；不同深度的特征提供互补信息。不要把它写成新增加了三个 cross-attention 模块，也不要把 DeepStack 本身说成 Qwen 首创。
 
@@ -327,4 +332,4 @@ Qwen3-VL 适合讨论的典型任务包括文档问答、图表解释、多图�
 
 历史 GitHub 入口可能跳转到更新仓库，研究某一代时应以对应论文版本为准。插件和交互框架的开源，也不等同于对应模型权重全部开放。
 
-**资料获取说明：**本次已读取并保存用于写作的网页文本快照，提供了公开 PDF 入口；没有将 PDF 二进制文件下载到素材目录，也没有运行模型或性能测试。Qwen3-VL 报告 Figure 1 是首选架构原图来源；本次未取得可导入的原图文件并确认其复用许可，因此正文采用自行绘制的辅助示意图，不能以代码仓库许可代替论文图片许可。
+**资料获取说明：**本次已读取并保存用于写作的网页文本快照，提供了公开 PDF 入口；没有将 PDF 二进制文件下载到素材目录，也没有运行模型或性能测试。正文引用 Qwen3-VL 报告 Figure 1 原图并注明出处（版权归原作者），另配两张依据报告自行绘制的架构示意图。
