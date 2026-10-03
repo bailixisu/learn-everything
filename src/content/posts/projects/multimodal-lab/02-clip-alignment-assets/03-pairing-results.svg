@@ -1,0 +1,77 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1100"
+  height="441"
+  viewBox="0 0 1100 441"
+>
+  <defs>
+    <marker
+      id="arrow"
+      markerWidth="10"
+      markerHeight="10"
+      refX="9"
+      refY="3"
+      orient="auto"
+    >
+      <path d="M0,0 L0,6 L9,3 z" fill="#52627a" />
+    </marker>
+  </defs>
+  <rect width="1100" height="441" rx="20" fill="#f7f9fc" />
+  <g font-family="PingFang SC,Microsoft YaHei,Arial,sans-serif" fill="#1e293b">
+    <text x="36" y="47" font-size="29" font-weight="600" fill="#1e293b">
+      第一轮实测：监督配对决定对齐是否成立
+    </text>
+    <text x="38" y="120" font-size="20" font-weight="400" fill="#1e293b">
+      正确配对：全部
+    </text>
+    <rect
+      x="330"
+      y="95"
+      width="578.6666750907898"
+      height="32"
+      rx="5"
+      fill="#397bc4"
+    />
+    <text x="945" y="120" font-size="21" font-weight="600" fill="#1e293b">
+      96.44%
+    </text>
+    <text x="38" y="184" font-size="20" font-weight="400" fill="#1e293b">
+      打乱配对：全部
+    </text>
+    <rect
+      x="330"
+      y="159"
+      width="22.66666665673256"
+      height="32"
+      rx="5"
+      fill="#d98952"
+    />
+    <text x="945" y="184" font-size="21" font-weight="600" fill="#1e293b">
+      3.78%
+    </text>
+    <text x="38" y="248" font-size="20" font-weight="400" fill="#1e293b">
+      正确配对：留出组合
+    </text>
+    <rect
+      x="330"
+      y="223"
+      width="472.0000147819519"
+      height="32"
+      rx="5"
+      fill="#397bc4"
+    />
+    <text x="945" y="248" font-size="21" font-weight="600" fill="#1e293b">
+      78.67%
+    </text>
+    <text x="38" y="312" font-size="20" font-weight="400" fill="#1e293b">
+      打乱配对：留出组合
+    </text>
+    <rect x="330" y="287" width="0.0" height="32" rx="5" fill="#d98952" />
+    <text x="945" y="312" font-size="21" font-weight="600" fill="#1e293b">
+      0.00%
+    </text>
+    <text x="38" y="411" font-size="19" font-weight="400" fill="#1e293b">
+      900 张独立渲染图，18 个候选；seed 42；随机参照 5.56%。
+    </text>
+  </g>
+</svg>

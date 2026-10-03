@@ -1,0 +1,162 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1100"
+  height="525"
+  viewBox="0 0 1100 525"
+>
+  <defs>
+    <marker
+      id="arrow"
+      markerWidth="10"
+      markerHeight="10"
+      refX="9"
+      refY="3"
+      orient="auto"
+    >
+      <path d="M0,0 L0,6 L9,3 z" fill="#52627a" />
+    </marker>
+  </defs>
+  <rect width="1100" height="525" rx="20" fill="#f7f9fc" />
+  <g font-family="PingFang SC,Microsoft YaHei,Arial,sans-serif" fill="#1e293b">
+    <text x="36" y="47" font-size="29" font-weight="600" fill="#1e293b">
+      CLIP：让图片与文字进入同一坐标系
+    </text>
+    <rect
+      x="35"
+      y="100"
+      width="210"
+      height="110"
+      rx="13"
+      fill="#e2ecfb"
+      stroke="#bfcee1"
+    />
+    <text x="50" y="133" font-size="22" font-weight="600" fill="#1e293b">
+      图像 xᵢ
+    </text>
+    <text x="50" y="162" font-size="22" font-weight="400" fill="#1e293b">
+      视觉 encoder
+    </text>
+    <rect
+      x="35"
+      y="280"
+      width="210"
+      height="110"
+      rx="13"
+      fill="#e2ecfb"
+      stroke="#bfcee1"
+    />
+    <text x="50" y="313" font-size="22" font-weight="600" fill="#1e293b">
+      文字 cⱼ
+    </text>
+    <text x="50" y="342" font-size="22" font-weight="400" fill="#1e293b">
+      text encoder
+    </text>
+    <rect
+      x="290"
+      y="100"
+      width="240"
+      height="110"
+      rx="13"
+      fill="#e2ecfb"
+      stroke="#bfcee1"
+    />
+    <text x="305" y="133" font-size="22" font-weight="600" fill="#1e293b">
+      投影 + 归一化
+    </text>
+    <text x="305" y="162" font-size="22" font-weight="400" fill="#1e293b">
+      vᵢ ∈ Rᴰ
+    </text>
+    <rect
+      x="290"
+      y="280"
+      width="240"
+      height="110"
+      rx="13"
+      fill="#e2ecfb"
+      stroke="#bfcee1"
+    />
+    <text x="305" y="313" font-size="22" font-weight="600" fill="#1e293b">
+      投影 + 归一化
+    </text>
+    <text x="305" y="342" font-size="22" font-weight="400" fill="#1e293b">
+      tⱼ ∈ Rᴰ
+    </text>
+    <rect
+      x="595"
+      y="145"
+      width="240"
+      height="145"
+      rx="13"
+      fill="#e2ecfb"
+      stroke="#bfcee1"
+    />
+    <text x="610" y="178" font-size="22" font-weight="600" fill="#1e293b">
+      共享向量空间
+    </text>
+    <text x="610" y="207" font-size="22" font-weight="400" fill="#1e293b">
+      Sᵢⱼ = dot(vᵢ, tⱼ) / τ
+    </text>
+    <text x="610" y="236" font-size="22" font-weight="400" fill="#1e293b">
+      S 的形状：B × B
+    </text>
+    <rect
+      x="890"
+      y="155"
+      width="175"
+      height="130"
+      rx="13"
+      fill="#dcf1e7"
+      stroke="#bfcee1"
+    />
+    <text x="905" y="188" font-size="22" font-weight="600" fill="#1e293b">
+      双向监督
+    </text>
+    <text x="905" y="217" font-size="22" font-weight="400" fill="#1e293b">
+      图 → 文
+    </text>
+    <text x="905" y="246" font-size="22" font-weight="400" fill="#1e293b">
+      文 → 图
+    </text>
+    <path
+      d="M245,155 L290,155"
+      stroke="#52627a"
+      stroke-width="2.5"
+      fill="none"
+      marker-end="url(#arrow)"
+    />
+    <path
+      d="M245,335 L290,335"
+      stroke="#52627a"
+      stroke-width="2.5"
+      fill="none"
+      marker-end="url(#arrow)"
+    />
+    <path
+      d="M530,155 L595,180"
+      stroke="#52627a"
+      stroke-width="2.5"
+      fill="none"
+      marker-end="url(#arrow)"
+    />
+    <path
+      d="M530,335 L595,260"
+      stroke="#52627a"
+      stroke-width="2.5"
+      fill="none"
+      marker-end="url(#arrow)"
+    />
+    <path
+      d="M835,220 L890,220"
+      stroke="#52627a"
+      stroke-width="2.5"
+      fill="none"
+      marker-end="url(#arrow)"
+    />
+    <text x="40" y="443" font-size="22" font-weight="400" fill="#1e293b">
+      正常配对：对角线是正例；打乱配对：标签不再对应图像语义。
+    </text>
+    <text x="40" y="480" font-size="22" font-weight="400" fill="#1e293b">
+      CLIP 输出相似度与向量；逐字回答需要另一个语言解码机制。
+    </text>
+  </g>
+</svg>

@@ -1,0 +1,66 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1100"
+  height="485"
+  viewBox="0 0 1100 485"
+>
+  <defs>
+    <marker
+      id="arrow"
+      markerWidth="10"
+      markerHeight="10"
+      refX="9"
+      refY="3"
+      orient="auto"
+    >
+      <path d="M0,0 L0,6 L9,3 z" fill="#52627a" />
+    </marker>
+  </defs>
+  <rect width="1100" height="485" rx="20" fill="#f7f9fc" />
+  <g font-family="PingFang SC,Microsoft YaHei,Arial,sans-serif" fill="#1e293b">
+    <text x="36" y="47" font-size="29" font-weight="600" fill="#1e293b">
+      真实抽表路线：通过 JSON 和通过计算并不等于答对
+    </text>
+    <text x="40" y="127" font-size="23" font-weight="400" fill="#1e293b">
+      总题数
+    </text>
+    <rect x="350" y="100" width="588.0" height="35" rx="6" fill="#9eb6d1" />
+    <text x="965" y="127" font-size="23" font-weight="600" fill="#1e293b">
+      240
+    </text>
+    <text x="40" y="192" font-size="23" font-weight="400" fill="#1e293b">
+      表格有效 / 可规划
+    </text>
+    <rect x="350" y="165" width="575.75" height="35" rx="6" fill="#80a8ce" />
+    <text x="965" y="192" font-size="23" font-weight="600" fill="#1e293b">
+      235
+    </text>
+    <text x="40" y="257" font-size="23" font-weight="400" fill="#1e293b">
+      计划可执行
+    </text>
+    <rect x="350" y="230" width="509.6" height="35" rx="6" fill="#5c91bf" />
+    <text x="965" y="257" font-size="23" font-weight="600" fill="#1e293b">
+      208
+    </text>
+    <text x="40" y="322" font-size="23" font-weight="400" fill="#1e293b">
+      最终正确
+    </text>
+    <rect
+      x="350"
+      y="295"
+      width="421.40000000000003"
+      height="35"
+      rx="6"
+      fill="#397bc4"
+    />
+    <text x="965" y="322" font-size="23" font-weight="600" fill="#1e293b">
+      172
+    </text>
+    <text x="40" y="401" font-size="21" font-weight="400" fill="#1e293b">
+      5 题因整表无效跳过 planner；27 条计划引用抽取表缺失单元格。
+    </text>
+    <text x="40" y="443" font-size="21" font-weight="400" fill="#1e293b">
+      36 条计划能执行，但错误数值或排序导致最终答案错误。
+    </text>
+  </g>
+</svg>

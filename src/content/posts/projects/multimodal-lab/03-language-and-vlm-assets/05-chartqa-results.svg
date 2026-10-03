@@ -1,0 +1,56 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1100"
+  height="441"
+  viewBox="0 0 1100 441"
+>
+  <defs>
+    <marker
+      id="arrow"
+      markerWidth="10"
+      markerHeight="10"
+      refX="9"
+      refY="3"
+      orient="auto"
+    >
+      <path d="M0,0 L0,6 L9,3 z" fill="#52627a" />
+    </marker>
+  </defs>
+  <rect width="1100" height="441" rx="20" fill="#f7f9fc" />
+  <g font-family="PingFang SC,Microsoft YaHei,Arial,sans-serif" fill="#1e293b">
+    <text x="36" y="47" font-size="29" font-weight="600" fill="#1e293b">
+      第三轮 ChartQA 同域测试：宽松数值与精确答案要分开
+    </text>
+    <text x="38" y="120" font-size="20" font-weight="400" fill="#1e293b">
+      冻结基座 / exact
+    </text>
+    <rect x="330" y="95" width="414.84375" height="32" rx="5" fill="#7198bc" />
+    <text x="945" y="120" font-size="21" font-weight="600" fill="#1e293b">
+      69.14%
+    </text>
+    <text x="38" y="184" font-size="20" font-weight="400" fill="#1e293b">
+      q/v r32 / exact
+    </text>
+    <rect x="330" y="159" width="421.875" height="32" rx="5" fill="#397bc4" />
+    <text x="945" y="184" font-size="21" font-weight="600" fill="#1e293b">
+      70.31%
+    </text>
+    <text x="38" y="248" font-size="20" font-weight="400" fill="#1e293b">
+      冻结基座 / relaxed
+    </text>
+    <rect x="330" y="223" width="475.78125" height="32" rx="5" fill="#91ba9f" />
+    <text x="945" y="248" font-size="21" font-weight="600" fill="#1e293b">
+      79.30%
+    </text>
+    <text x="38" y="312" font-size="20" font-weight="400" fill="#1e293b">
+      q/v r32 / relaxed
+    </text>
+    <rect x="330" y="287" width="499.21875" height="32" rx="5" fill="#4a977a" />
+    <text x="945" y="312" font-size="21" font-weight="600" fill="#1e293b">
+      83.20%
+    </text>
+    <text x="38" y="411" font-size="19" font-weight="400" fill="#1e293b">
+      256 个不同图像；relaxed 数字允许 5% 相对误差；rank 32 由验证集选出。
+    </text>
+  </g>
+</svg>

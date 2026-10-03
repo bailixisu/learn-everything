@@ -1,0 +1,70 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1100"
+  height="569"
+  viewBox="0 0 1100 569"
+>
+  <defs>
+    <marker
+      id="arrow"
+      markerWidth="10"
+      markerHeight="10"
+      refX="9"
+      refY="3"
+      orient="auto"
+    >
+      <path d="M0,0 L0,6 L9,3 z" fill="#52627a" />
+    </marker>
+  </defs>
+  <rect width="1100" height="569" rx="20" fill="#f7f9fc" />
+  <g font-family="PingFang SC,Microsoft YaHei,Arial,sans-serif" fill="#1e293b">
+    <text x="36" y="47" font-size="29" font-weight="600" fill="#1e293b">
+      第三轮：六类真实花卉测试，120 张照片
+    </text>
+    <text x="38" y="120" font-size="20" font-weight="400" fill="#1e293b">
+      CLIP / 零样本
+    </text>
+    <rect x="330" y="95" width="590.0" height="32" rx="5" fill="#397bc4" />
+    <text x="945" y="120" font-size="21" font-weight="600" fill="#1e293b">
+      98.33%
+    </text>
+    <text x="38" y="184" font-size="20" font-weight="400" fill="#1e293b">
+      CLIP / 原型
+    </text>
+    <rect x="330" y="159" width="595.0" height="32" rx="5" fill="#397bc4" />
+    <text x="945" y="184" font-size="21" font-weight="600" fill="#1e293b">
+      99.17%
+    </text>
+    <text x="38" y="248" font-size="20" font-weight="400" fill="#1e293b">
+      CLIP / 岭回归
+    </text>
+    <rect x="330" y="223" width="595.0" height="32" rx="5" fill="#397bc4" />
+    <text x="945" y="248" font-size="21" font-weight="600" fill="#1e293b">
+      99.17%
+    </text>
+    <text x="38" y="312" font-size="20" font-weight="400" fill="#1e293b">
+      SigLIP2 / 零样本
+    </text>
+    <rect x="330" y="287" width="600.0" height="32" rx="5" fill="#4a977a" />
+    <text x="945" y="312" font-size="21" font-weight="600" fill="#1e293b">
+      100.00%
+    </text>
+    <text x="38" y="376" font-size="20" font-weight="400" fill="#1e293b">
+      SigLIP2 / 原型
+    </text>
+    <rect x="330" y="351" width="600.0" height="32" rx="5" fill="#4a977a" />
+    <text x="945" y="376" font-size="21" font-weight="600" fill="#1e293b">
+      100.00%
+    </text>
+    <text x="38" y="440" font-size="20" font-weight="400" fill="#1e293b">
+      SigLIP2 / 岭回归
+    </text>
+    <rect x="330" y="415" width="600.0" height="32" rx="5" fill="#4a977a" />
+    <text x="945" y="440" font-size="21" font-weight="600" fill="#1e293b">
+      100.00%
+    </text>
+    <text x="38" y="539" font-size="19" font-weight="400" fill="#1e293b">
+      CLIP 少样本拟合多答对 1 张；这个容易子集不能形成通用模型排名。
+    </text>
+  </g>
+</svg>

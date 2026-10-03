@@ -1,0 +1,162 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1100"
+  height="540"
+  viewBox="0 0 1100 540"
+>
+  <defs>
+    <marker
+      id="arrow"
+      markerWidth="10"
+      markerHeight="10"
+      refX="9"
+      refY="3"
+      orient="auto"
+    >
+      <path d="M0,0 L0,6 L9,3 z" fill="#52627a" />
+    </marker>
+  </defs>
+  <rect width="1100" height="540" rx="20" fill="#f7f9fc" />
+  <g font-family="PingFang SC,Microsoft YaHei,Arial,sans-serif" fill="#1e293b">
+    <text x="36" y="47" font-size="29" font-weight="600" fill="#1e293b">
+      从“图文相似”到“看图生成”：连续视觉 token 进入语言模型
+    </text>
+    <rect
+      x="30"
+      y="105"
+      width="210"
+      height="110"
+      rx="13"
+      fill="#e2ecfb"
+      stroke="#bfcee1"
+    />
+    <text x="45" y="138" font-size="22" font-weight="600" fill="#1e293b">
+      图片 48×48
+    </text>
+    <text x="45" y="167" font-size="22" font-weight="400" fill="#1e293b">
+      冻结 CNN encoder
+    </text>
+    <rect
+      x="295"
+      y="105"
+      width="220"
+      height="110"
+      rx="13"
+      fill="#e2ecfb"
+      stroke="#bfcee1"
+    />
+    <text x="310" y="138" font-size="22" font-weight="600" fill="#1e293b">
+      4 个视觉 token
+    </text>
+    <text x="310" y="167" font-size="22" font-weight="400" fill="#1e293b">
+      [B, 4, 128]
+    </text>
+    <rect
+      x="570"
+      y="105"
+      width="225"
+      height="110"
+      rx="13"
+      fill="#dcf1e7"
+      stroke="#bfcee1"
+    />
+    <text x="585" y="138" font-size="22" font-weight="600" fill="#1e293b">
+      训练 projector
+    </text>
+    <text x="585" y="167" font-size="22" font-weight="400" fill="#1e293b">
+      128 → 256 → 128
+    </text>
+    <rect
+      x="30"
+      y="290"
+      width="210"
+      height="110"
+      rx="13"
+      fill="#e2ecfb"
+      stroke="#bfcee1"
+    />
+    <text x="45" y="323" font-size="22" font-weight="600" fill="#1e293b">
+      文字问题
+    </text>
+    <text x="45" y="352" font-size="22" font-weight="400" fill="#1e293b">
+      token IDs
+    </text>
+    <rect
+      x="295"
+      y="290"
+      width="220"
+      height="110"
+      rx="13"
+      fill="#e2ecfb"
+      stroke="#bfcee1"
+    />
+    <text x="310" y="323" font-size="22" font-weight="600" fill="#1e293b">
+      词 embedding
+    </text>
+    <text x="310" y="352" font-size="22" font-weight="400" fill="#1e293b">
+      问题 + 答案前缀
+    </text>
+    <rect
+      x="850"
+      y="150"
+      width="210"
+      height="160"
+      rx="13"
+      fill="#e2ecfb"
+      stroke="#bfcee1"
+    />
+    <text x="865" y="183" font-size="22" font-weight="600" fill="#1e293b">
+      causal decoder
+    </text>
+    <text x="865" y="212" font-size="22" font-weight="400" fill="#1e293b">
+      冻结基础参数
+    </text>
+    <text x="865" y="241" font-size="22" font-weight="400" fill="#1e293b">
+      Q/V 加 LoRA 可选
+    </text>
+    <text x="865" y="270" font-size="22" font-weight="400" fill="#1e293b">
+      生成回答 token
+    </text>
+    <path
+      d="M240,160 L295,160"
+      stroke="#52627a"
+      stroke-width="2.5"
+      fill="none"
+      marker-end="url(#arrow)"
+    />
+    <path
+      d="M515,160 L570,160"
+      stroke="#52627a"
+      stroke-width="2.5"
+      fill="none"
+      marker-end="url(#arrow)"
+    />
+    <path
+      d="M795,160 L850,190"
+      stroke="#52627a"
+      stroke-width="2.5"
+      fill="none"
+      marker-end="url(#arrow)"
+    />
+    <path
+      d="M240,345 L295,345"
+      stroke="#52627a"
+      stroke-width="2.5"
+      fill="none"
+      marker-end="url(#arrow)"
+    />
+    <path
+      d="M515,345 L850,260"
+      stroke="#52627a"
+      stroke-width="2.5"
+      fill="none"
+      marker-end="url(#arrow)"
+    />
+    <text x="35" y="460" font-size="21" font-weight="400" fill="#1e293b">
+      答案区交叉熵 → decoder 的输入梯度 → projector；冻结权重仍保留梯度链。
+    </text>
+    <text x="35" y="499" font-size="21" font-weight="400" fill="#1e293b">
+      这幅图对应第二轮教学 VLM；不是 Qwen3-VL 完整架构图。
+    </text>
+  </g>
+</svg>

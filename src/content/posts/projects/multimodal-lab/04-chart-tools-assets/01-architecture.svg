@@ -1,0 +1,136 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1100"
+  height="540"
+  viewBox="0 0 1100 540"
+>
+  <defs>
+    <marker
+      id="arrow"
+      markerWidth="10"
+      markerHeight="10"
+      refX="9"
+      refY="3"
+      orient="auto"
+    >
+      <path d="M0,0 L0,6 L9,3 z" fill="#52627a" />
+    </marker>
+  </defs>
+  <rect width="1100" height="540" rx="20" fill="#f7f9fc" />
+  <g font-family="PingFang SC,Microsoft YaHei,Arial,sans-serif" fill="#1e293b">
+    <text x="36" y="47" font-size="29" font-weight="600" fill="#1e293b">
+      把图表问答拆成可核查的三段：抽表 → 计划 → 执行
+    </text>
+    <rect
+      x="30"
+      y="110"
+      width="200"
+      height="115"
+      rx="13"
+      fill="#e2ecfb"
+      stroke="#bfcee1"
+    />
+    <text x="45" y="143" font-size="22" font-weight="600" fill="#1e293b">
+      真实图片
+    </text>
+    <text x="45" y="172" font-size="22" font-weight="400" fill="#1e293b">
+      含印刷数值标签
+    </text>
+    <rect
+      x="280"
+      y="110"
+      width="225"
+      height="115"
+      rx="13"
+      fill="#e2ecfb"
+      stroke="#bfcee1"
+    />
+    <text x="295" y="143" font-size="22" font-weight="600" fill="#1e293b">
+      冻结 Qwen3-VL
+    </text>
+    <text x="295" y="172" font-size="22" font-weight="400" fill="#1e293b">
+      完整抽表 JSON
+    </text>
+    <rect
+      x="555"
+      y="110"
+      width="225"
+      height="115"
+      rx="13"
+      fill="#e2ecfb"
+      stroke="#bfcee1"
+    />
+    <text x="570" y="143" font-size="22" font-weight="600" fill="#1e293b">
+      冻结 Qwen3-VL
+    </text>
+    <text x="570" y="172" font-size="22" font-weight="400" fill="#1e293b">
+      问题 → 操作计划
+    </text>
+    <rect
+      x="830"
+      y="110"
+      width="235"
+      height="115"
+      rx="13"
+      fill="#dcf1e7"
+      stroke="#bfcee1"
+    />
+    <text x="845" y="143" font-size="22" font-weight="600" fill="#1e293b">
+      白名单执行器
+    </text>
+    <text x="845" y="172" font-size="22" font-weight="400" fill="#1e293b">
+      查表 + 整数算术
+    </text>
+    <text x="845" y="201" font-size="22" font-weight="400" fill="#1e293b">
+      最终数字 / 站点
+    </text>
+    <path
+      d="M230,165 L280,165"
+      stroke="#52627a"
+      stroke-width="2.5"
+      fill="none"
+      marker-end="url(#arrow)"
+    />
+    <path
+      d="M505,165 L555,165"
+      stroke="#52627a"
+      stroke-width="2.5"
+      fill="none"
+      marker-end="url(#arrow)"
+    />
+    <path
+      d="M780,165 L830,165"
+      stroke="#52627a"
+      stroke-width="2.5"
+      fill="none"
+      marker-end="url(#arrow)"
+    />
+    <rect
+      x="300"
+      y="300"
+      width="430"
+      height="110"
+      rx="13"
+      fill="#e6ebf1"
+      stroke="#bfcee1"
+    />
+    <text x="315" y="333" font-size="22" font-weight="600" fill="#1e293b">
+      五种操作
+    </text>
+    <text x="315" y="362" font-size="22" font-weight="400" fill="#1e293b">
+      get / sum / subtract
+    </text>
+    <text x="315" y="391" font-size="22" font-weight="400" fill="#1e293b">
+      argmax / unanswerable
+    </text>
+    <text x="35" y="270" font-size="22" font-weight="400" fill="#1e293b">
+      抽表每张图执行一次；同图 5 题复用。计划由模型产生，不读取题型。
+    </text>
+    <text x="35" y="456" font-size="21" font-weight="400" fill="#1e293b">
+      独立 oracle 诊断：用生成器真值表替代“抽表 JSON”，并额外给出答案上限。
+    </text>
+    <text x="35" y="498" font-size="22" font-weight="400" fill="#1e293b">
+      真实图片路线不读取真值；解析失败与缺失单元格都拒绝执行。
+    </text>
+  </g>
+</svg>

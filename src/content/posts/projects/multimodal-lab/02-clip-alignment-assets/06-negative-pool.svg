@@ -1,0 +1,112 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1100"
+  height="569"
+  viewBox="0 0 1100 569"
+>
+  <defs>
+    <marker
+      id="arrow"
+      markerWidth="10"
+      markerHeight="10"
+      refX="9"
+      refY="3"
+      orient="auto"
+    >
+      <path d="M0,0 L0,6 L9,3 z" fill="#52627a" />
+    </marker>
+  </defs>
+  <rect width="1100" height="569" rx="20" fill="#f7f9fc" />
+  <g font-family="PingFang SC,Microsoft YaHei,Arial,sans-serif" fill="#1e293b">
+    <text x="36" y="47" font-size="29" font-weight="600" fill="#1e293b">
+      第二轮实测：未见组合，按训练 seed 分开看
+    </text>
+    <text x="38" y="120" font-size="20" font-weight="400" fill="#1e293b">
+      多正例：64 候选 / 42
+    </text>
+    <rect
+      x="330"
+      y="95"
+      width="484.0000033378601"
+      height="32"
+      rx="5"
+      fill="#397bc4"
+    />
+    <text x="945" y="120" font-size="21" font-weight="600" fill="#1e293b">
+      80.67%
+    </text>
+    <text x="38" y="184" font-size="20" font-weight="400" fill="#1e293b">
+      多正例：64 候选 / 43
+    </text>
+    <rect
+      x="330"
+      y="159"
+      width="548.0000138282776"
+      height="32"
+      rx="5"
+      fill="#80aad6"
+    />
+    <text x="945" y="184" font-size="21" font-weight="600" fill="#1e293b">
+      91.33%
+    </text>
+    <text x="38" y="248" font-size="20" font-weight="400" fill="#1e293b">
+      对角线：64 候选 / 42
+    </text>
+    <rect
+      x="330"
+      y="223"
+      width="491.9999957084656"
+      height="32"
+      rx="5"
+      fill="#397bc4"
+    />
+    <text x="945" y="248" font-size="21" font-weight="600" fill="#1e293b">
+      82.00%
+    </text>
+    <text x="38" y="312" font-size="20" font-weight="400" fill="#1e293b">
+      对角线：64 候选 / 43
+    </text>
+    <rect
+      x="330"
+      y="287"
+      width="532.0000290870667"
+      height="32"
+      rx="5"
+      fill="#80aad6"
+    />
+    <text x="945" y="312" font-size="21" font-weight="600" fill="#1e293b">
+      88.67%
+    </text>
+    <text x="38" y="376" font-size="20" font-weight="400" fill="#1e293b">
+      多正例：8 候选 × 8 累积 / 42
+    </text>
+    <rect
+      x="330"
+      y="351"
+      width="432.0000171661377"
+      height="32"
+      rx="5"
+      fill="#397bc4"
+    />
+    <text x="945" y="376" font-size="21" font-weight="600" fill="#1e293b">
+      72.00%
+    </text>
+    <text x="38" y="440" font-size="20" font-weight="400" fill="#1e293b">
+      多正例：8 候选 × 8 累积 / 43
+    </text>
+    <rect
+      x="330"
+      y="415"
+      width="524.0000009536743"
+      height="32"
+      rx="5"
+      fill="#80aad6"
+    />
+    <text x="945" y="440" font-size="21" font-weight="600" fill="#1e293b">
+      87.33%
+    </text>
+    <text x="38" y="539" font-size="19" font-weight="400" fill="#1e293b">
+      同样 400 次更新与 64 对/更新；8×8 的累积没有构造 64×64 相似度。
+    </text>
+  </g>
+</svg>

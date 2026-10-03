@@ -1,0 +1,55 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1100"
+  height="570"
+  viewBox="0 0 1100 570"
+>
+  <defs>
+    <marker
+      id="arrow"
+      markerWidth="10"
+      markerHeight="10"
+      refX="9"
+      refY="3"
+      orient="auto"
+    >
+      <path d="M0,0 L0,6 L9,3 z" fill="#52627a" />
+    </marker>
+  </defs>
+  <rect width="1100" height="570" rx="20" fill="#f7f9fc" />
+  <g font-family="PingFang SC,Microsoft YaHei,Arial,sans-serif" fill="#1e293b">
+    <text x="36" y="47" font-size="29" font-weight="600" fill="#1e293b">
+      Case：数值更接近，不等于计算完全正确
+    </text>
+    <rect x="90" y="342.5" width="160" height="7.5" fill="#bc6599" />
+    <text x="90" y="390" font-size="22" font-weight="400" fill="#1e293b">
+      Yemen
+    </text>
+    <text x="145" y="332.5" font-size="22" font-weight="600" fill="#1e293b">
+      6
+    </text>
+    <rect x="390" y="272.5" width="160" height="77.5" fill="#4e9bc9" />
+    <text x="390" y="390" font-size="22" font-weight="400" fill="#1e293b">
+      El Salvador
+    </text>
+    <text x="445" y="262.5" font-size="22" font-weight="600" fill="#1e293b">
+      62
+    </text>
+    <rect x="690" y="112.5" width="160" height="237.5" fill="#cf7057" />
+    <text x="690" y="390" font-size="22" font-weight="400" fill="#1e293b">
+      Montenegro
+    </text>
+    <text x="745" y="102.5" font-size="22" font-weight="600" fill="#1e293b">
+      190
+    </text>
+    <text x="40" y="440" font-size="24" font-weight="600" fill="#1e293b">
+      真实题目：Yemen 与 Montenegro 的平均值是多少？
+    </text>
+    <text x="40" y="483" font-size="24" font-weight="400" fill="#1e293b">
+      金标 98 | 基座 103 | q/v r8 适配器 100
+    </text>
+    <text x="40" y="526" font-size="21" font-weight="400" fill="#1e293b">
+      100 进入 5% 容差，但仍不是精确答案；图表数据按 ChartQA 案例重绘。
+    </text>
+  </g>
+</svg>

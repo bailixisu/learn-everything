@@ -1,0 +1,112 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1100"
+  height="569"
+  viewBox="0 0 1100 569"
+>
+  <defs>
+    <marker
+      id="arrow"
+      markerWidth="10"
+      markerHeight="10"
+      refX="9"
+      refY="3"
+      orient="auto"
+    >
+      <path d="M0,0 L0,6 L9,3 z" fill="#52627a" />
+    </marker>
+  </defs>
+  <rect width="1100" height="569" rx="20" fill="#f7f9fc" />
+  <g font-family="PingFang SC,Microsoft YaHei,Arial,sans-serif" fill="#1e293b">
+    <text x="36" y="47" font-size="29" font-weight="600" fill="#1e293b">
+      固定输出重新评分：ChartQAPro 官方规则平均分 × 100
+    </text>
+    <text x="38" y="120" font-size="20" font-weight="400" fill="#1e293b">
+      baseline
+    </text>
+    <rect
+      x="330"
+      y="95"
+      width="116.43912613122174"
+      height="32"
+      rx="5"
+      fill="#397bc4"
+    />
+    <text x="945" y="120" font-size="21" font-weight="600" fill="#1e293b">
+      19.41
+    </text>
+    <text x="38" y="184" font-size="20" font-weight="400" fill="#1e293b">
+      r8_n256_s17
+    </text>
+    <rect
+      x="330"
+      y="159"
+      width="112.97959087481148"
+      height="32"
+      rx="5"
+      fill="#80aad6"
+    />
+    <text x="945" y="184" font-size="21" font-weight="600" fill="#1e293b">
+      18.83
+    </text>
+    <text x="38" y="248" font-size="20" font-weight="400" fill="#1e293b">
+      r8_n1024_s17
+    </text>
+    <rect
+      x="330"
+      y="223"
+      width="130.21516779788843"
+      height="32"
+      rx="5"
+      fill="#80aad6"
+    />
+    <text x="945" y="248" font-size="21" font-weight="600" fill="#1e293b">
+      21.70
+    </text>
+    <text x="38" y="312" font-size="20" font-weight="400" fill="#1e293b">
+      r8_n1024_s29
+    </text>
+    <rect
+      x="330"
+      y="287"
+      width="117.27646587481146"
+      height="32"
+      rx="5"
+      fill="#80aad6"
+    />
+    <text x="945" y="312" font-size="21" font-weight="600" fill="#1e293b">
+      19.55
+    </text>
+    <text x="38" y="376" font-size="20" font-weight="400" fill="#1e293b">
+      r32_n1024_s17
+    </text>
+    <rect
+      x="330"
+      y="351"
+      width="115.27599238996301"
+      height="32"
+      rx="5"
+      fill="#80aad6"
+    />
+    <text x="945" y="376" font-size="21" font-weight="600" fill="#1e293b">
+      19.21
+    </text>
+    <text x="38" y="440" font-size="20" font-weight="400" fill="#1e293b">
+      all_r8_n1024_s17
+    </text>
+    <rect
+      x="330"
+      y="415"
+      width="116.56933446455508"
+      height="32"
+      rx="5"
+      fill="#80aad6"
+    />
+    <text x="945" y="440" font-size="21" font-weight="600" fill="#1e293b">
+      19.43
+    </text>
+    <text x="38" y="539" font-size="19" font-weight="400" fill="#1e293b">
+      128 个不同图像的 Factoid 子集；含 ANLS 部分分；无新训练、无新推理。
+    </text>
+  </g>
+</svg>

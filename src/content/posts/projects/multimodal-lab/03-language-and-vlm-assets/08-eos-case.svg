@@ -1,0 +1,73 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1100"
+  height="485"
+  viewBox="0 0 1100 485"
+>
+  <defs>
+    <marker
+      id="arrow"
+      markerWidth="10"
+      markerHeight="10"
+      refX="9"
+      refY="3"
+      orient="auto"
+    >
+      <path d="M0,0 L0,6 L9,3 z" fill="#52627a" />
+    </marker>
+  </defs>
+  <rect width="1100" height="485" rx="20" fill="#f7f9fc" />
+  <g font-family="PingFang SC,Microsoft YaHei,Arial,sans-serif" fill="#1e293b">
+    <text x="36" y="47" font-size="29" font-weight="600" fill="#1e293b">
+      Case：接入视觉之后，问法长度仍能触发过早终止
+    </text>
+    <rect
+      x="35"
+      y="100"
+      width="490"
+      height="130"
+      rx="13"
+      fill="#e2ecfb"
+      stroke="#bfcee1"
+    />
+    <text x="50" y="133" font-size="22" font-weight="600" fill="#1e293b">
+      视觉指令原问法
+    </text>
+    <text x="50" y="162" font-size="22" font-weight="400" fill="#1e293b">
+      question color ? answer
+    </text>
+    <text x="50" y="191" font-size="22" font-weight="400" fill="#1e293b">
+      seed 29：align + LoRA，test 98.67%
+    </text>
+    <rect
+      x="570"
+      y="100"
+      width="490"
+      height="130"
+      rx="13"
+      fill="#ffece2"
+      stroke="#bfcee1"
+    />
+    <text x="585" y="133" font-size="22" font-weight="600" fill="#1e293b">
+      视觉指令改写
+    </text>
+    <text x="585" y="162" font-size="22" font-weight="400" fill="#1e293b">
+      question tell the color ? answer
+    </text>
+    <text x="585" y="191" font-size="22" font-weight="400" fill="#1e293b">
+      同一模型，改写 exact match 0%
+    </text>
+    <text x="40" y="294" font-size="24" font-weight="600" fill="#1e293b">
+      原始 token 诊断：60 个场景 × 3 种问题
+    </text>
+    <text x="40" y="339" font-size="24" font-weight="400" fill="#1e293b">
+      短问法：首 token 为 EOS 的比例 0%；长问法：100%。
+    </text>
+    <text x="40" y="389" font-size="24" font-weight="400" fill="#1e293b">
+      不是渲染层吞掉答案，而是模型直接提前终止。
+    </text>
+    <text x="40" y="440" font-size="22" font-weight="400" fill="#1e293b">
+      该问法曾出现在 LM 预训练中，但未用于 VLM 指令训练。
+    </text>
+  </g>
+</svg>
