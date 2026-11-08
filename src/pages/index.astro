@@ -1,19 +1,23 @@
 ---
 import { getCollection } from "astro:content";
 import { getRelativeLocaleUrl } from "astro:i18n";
-import IconRss from "@/assets/icons/IconRss.svg";
-import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Socials from "@/components/Socials.astro";
-import Card from "@/components/Card.astro";
-import HubTile from "@/components/HubTile.astro";
-import SectionHeading from "@/components/SectionHeading.astro";
-import LinkButton from "@/components/LinkButton.astro";
+import GardenFolioItem from "@/components/GardenFolioItem.astro";
+import { getPostUrl } from "@/utils/getPostPaths";
 import { getSortedPosts } from "@/utils/getSortedPosts";
+import { toTransitionName } from "@/utils/toTransitionName";
 import { useTranslations } from "@/i18n";
 import config from "@/config";
+import "@/styles/garden-home.css";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const { socials, posts: postsConfig, site } = config;
 
@@ -23,142 +27,207 @@ const t = useTranslations(locale);
 const posts = await getCollection("posts");
 const sortedPosts = getSortedPosts(posts);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const nowPost = featuredPosts[0] ?? sortedPosts[0];
+const grovePosts = sortedPosts
+  .filter(post => post.id !== nowPost?.id)
+  .slice(0, postsConfig.perIndex);
+
 const homePath = getRelativeLocaleUrl(locale, "");
 const rssBase = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+
+const titleParts = site.title.trim().split(/\s+/);
+const titlePrimary = titleParts[0] ?? site.title;
+const titleSecondary = titleParts.slice(1).join(" ") || "";
+
+function formatGardenDate(post: (typeof sortedPosts)[number]) {
+  const { pubDatetime, modDatetime, timezone: postTz } = post.data;
+  const stamp = dayjs(
+    modDatetime && modDatetime > pubDatetime ? modDatetime : pubDatetime
+  ).tz(postTz ?? config.site.timezone);
+  return { label: stamp.format("YYYY年M月D日"), iso: stamp.toISOString() };
+}
+
+const nowMeta = nowPost ? formatGardenDate(nowPost) : null;
+const nowUrl = nowPost
+  ? getPostUrl(nowPost.id, nowPost.filePath, locale)
+  : null;
 ---
 
 <Layout>
-  <Header />
+  <Header chrome="garden" />
   <main
     id="main-content"
     data-layout="index"
     data-home-path={homePath}
-    class="app-layout pb-10"
+    class="garden-canvas"
   >
-    <section
-      id="hero"
-      class="hero-ambient motion-fade-up border-border/70 relative -mx-4 overflow-hidden border-b px-4 pt-10 pb-10 sm:-mx-6 sm:px-6 sm:pt-14 sm:pb-12"
-      style="--motion-delay: 0ms"
-    >
-      <div class="relative z-[1] max-w-2xl">
-        <p
-          class="text-accent text-xs font-semibold tracking-[0.22em] uppercase sm:text-sm"
-        >
-          {t.home.eyebrow}
-        </p>
-        <div class="mt-4 flex flex-wrap items-center gap-3">
-          <h1
-            class="text-foreground text-4xl font-bold tracking-tight sm:text-5xl"
-          >
-            {site.title}
-          </h1>
-          <a
-            target="_blank"
-            href={`${rssBase}rss.xml`}
-            class="text-muted-foreground hover:text-accent inline-flex items-center gap-1 rounded-full border border-dashed px-2.5 py-1 text-xs transition-colors"
-            aria-label="RSS Feed"
-            title="RSS Feed"
-          >
-            <IconRss width={16} height={16} class="stroke-current stroke-2" />
-            <span>RSS</span>
-          </a>
-        </div>
-        <p class="mt-5 max-w-xl text-lg leading-8">{t.home.lead}</p>
-        <p
-          class="text-muted-foreground mt-3 max-w-xl text-sm leading-7 sm:text-base"
-        >
-          {t.home.aside}
-        </p>
-        {
-          socials.length > 0 && (
-            <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:items-center">
-              <span class="text-muted-foreground text-sm">
-                {t.home.socialLinks}
-              </span>
-              <Socials />
-            </div>
-          )
-        }
-      </div>
-    </section>
+    <div class="garden-glow" aria-hidden="true"></div>
 
     <section
-      id="explore"
-      class="reveal-section pt-12 sm:pt-14"
-      style="--reveal-delay: 40ms"
+      class="garden-spread reveal-garden"
       data-reveal="pending"
+      style="--reveal-delay: 0ms"
+      aria-labelledby="garden-masthead"
     >
-      <SectionHeading title={t.home.exploreTitle} hint={t.home.exploreDesc} />
-      <div class="grid gap-4 sm:grid-cols-2">
-        <HubTile
-          href={getRelativeLocaleUrl(locale, "posts")}
-          title={t.home.hubPostsTitle}
-          description={t.home.hubPostsDesc}
-        />
-        <HubTile
-          href={getRelativeLocaleUrl(locale, "tags")}
-          title={t.home.hubTagsTitle}
-          description={t.home.hubTagsDesc}
-        />
-        <HubTile
-          href={getRelativeLocaleUrl(locale, "projects")}
-          title={t.home.hubProjectsTitle}
-          description={t.home.hubProjectsDesc}
-        />
-        <HubTile
-          href={getRelativeLocaleUrl(locale, "about")}
-          title={t.home.hubAboutTitle}
-          description={t.home.hubAboutDesc}
-        />
+      <p class="garden-vertical garden-parallax" data-parallax="0.04">
+        {t.home.mastheadMark}
+      </p>
+
+      <div class="garden-masthead" id="garden-masthead">
+        <span class="garden-masthead-ghost garden-parallax" data-parallax="0.06"
+          >{t.home.mastheadGhost}</span
+        >
+        <div class="garden-title-stack">
+          <span class="garden-title-line">{titlePrimary}</span>
+          {
+            titleSecondary && (
+              <span class="garden-title-line garden-title-line--shift">
+                {titleSecondary}
+              </span>
+            )
+          }
+        </div>
+        <p class="garden-hand">{t.home.mastheadSub}</p>
       </div>
+
+      <div class="garden-lede">
+        <p>{t.home.lead}</p>
+        <p>{t.home.aside}</p>
+      </div>
+
+      <aside class="garden-whisper-wrap">
+        <p class="garden-whisper-label">{t.home.whisperIntro}</p>
+        <p class="garden-whisper">
+          <a href={getRelativeLocaleUrl(locale, "posts")}>{t.nav.posts}</a>
+          <span aria-hidden="true"> · </span>
+          <a href={getRelativeLocaleUrl(locale, "tags")}>{t.nav.knowledge}</a>
+          <span aria-hidden="true"> · </span>
+          <a href={getRelativeLocaleUrl(locale, "projects")}>{t.nav.projects}</a
+          >
+          <span aria-hidden="true"> · </span>
+          <a href={getRelativeLocaleUrl(locale, "about")}>{t.nav.about}</a>
+          <span aria-hidden="true"> · </span>
+          <a
+            href={`${rssBase}rss.xml`}
+            target="_blank"
+            rel="noopener noreferrer">RSS</a
+          >
+        </p>
+      </aside>
+
+      {
+        socials.length > 0 && (
+          <div class="garden-social">
+            <span>{t.home.socialLinks}</span>
+            <Socials />
+          </div>
+        )
+      }
     </section>
 
-    {
-      featuredPosts.length > 0 && (
-        <section
-          id="featured"
-          class="reveal-section pt-14"
-          style="--reveal-delay: 80ms"
-          data-reveal="pending"
-        >
-          <SectionHeading title={t.home.featured} hint={t.home.featuredHint} />
-          <ul class="grid gap-4">
-            {featuredPosts.map(data => (
-              <Card variant="h3" presentation="surface" {...data} />
-            ))}
-          </ul>
-        </section>
-      )
-    }
+    <hr class="garden-rule" />
 
     {
-      recentPosts.length > 0 && (
+      nowPost && nowUrl && (
         <section
-          id="recent-posts"
-          class="reveal-section pt-14"
+          class="garden-chapter reveal-garden"
+          data-reveal="pending"
           style="--reveal-delay: 120ms"
-          data-reveal="pending"
+          aria-labelledby="chapter-now"
         >
-          <SectionHeading title={t.home.recentPosts} hint={t.home.recentHint} />
-          <ul class="grid gap-4 sm:grid-cols-2">
-            {recentPosts.slice(0, postsConfig.perIndex).map(data => (
-              <Card variant="h3" presentation="surface" {...data} />
-            ))}
-          </ul>
+          <header class="garden-chapter-head">
+            <span class="garden-chapter-index" aria-hidden="true">
+              壹
+            </span>
+            <h2 id="chapter-now" class="garden-chapter-title">
+              {t.home.sectionNow}
+            </h2>
+            <p class="garden-chapter-epigraph">{t.home.sectionNowEpigraph}</p>
+          </header>
+
+          <article class="garden-now-spread">
+            <a href={nowUrl} class="garden-now-link">
+              <h3
+                transition:name={toTransitionName(nowPost.id)}
+                class="garden-now-title"
+              >
+                {nowPost.data.title}
+              </h3>
+              {nowPost.data.description && (
+                <p class="garden-now-desc">{nowPost.data.description}</p>
+              )}
+              {nowMeta && (
+                <p class="garden-now-meta">
+                  <time datetime={nowMeta.iso}>{nowMeta.label}</time>
+                </p>
+              )}
+            </a>
+          </article>
         </section>
       )
     }
 
-    <div class="reveal-section mt-12 text-center" data-reveal="pending">
-      <LinkButton
-        href={getRelativeLocaleUrl(locale, "posts")}
-        class="text-accent border-border hover:bg-muted/40 inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium transition-colors"
-      >
-        {t.home.allPosts}
-        <IconArrowRight class="inline-block rtl:-rotate-180" />
-      </LinkButton>
-    </div>
+    {
+      grovePosts.length > 0 && (
+        <section
+          class="garden-chapter reveal-garden"
+          data-reveal="pending"
+          style="--reveal-delay: 200ms"
+          aria-labelledby="chapter-garden"
+        >
+          <header class="garden-chapter-head">
+            <span class="garden-chapter-index" aria-hidden="true">
+              贰
+            </span>
+            <h2 id="chapter-garden" class="garden-chapter-title">
+              {t.home.sectionGarden}
+            </h2>
+            <p class="garden-chapter-epigraph">
+              {t.home.sectionGardenEpigraph}
+            </p>
+          </header>
+
+          <ol class="garden-folio">
+            {grovePosts.map(data => (
+              <GardenFolioItem
+                heading="h3"
+                readLabel={t.home.folioRead}
+                {...data}
+              />
+            ))}
+          </ol>
+        </section>
+      )
+    }
+
+    <section
+      class="garden-chapter reveal-garden"
+      data-reveal="pending"
+      style="--reveal-delay: 280ms"
+      aria-labelledby="chapter-notes"
+    >
+      <header class="garden-chapter-head">
+        <span class="garden-chapter-index" aria-hidden="true">叁</span>
+        <h2 id="chapter-notes" class="garden-chapter-title">
+          {t.home.sectionNotes}
+        </h2>
+        <p class="garden-chapter-epigraph">{t.home.sectionNotesEpigraph}</p>
+      </header>
+
+      <p class="garden-notes-prose">
+        {t.home.notesLine1}
+        <a href={getRelativeLocaleUrl(locale, "posts")}>{t.nav.posts}</a>、
+        <a href={getRelativeLocaleUrl(locale, "tags")}>{t.nav.knowledge}</a>
+        {t.home.notesLine2}
+        <a href={getRelativeLocaleUrl(locale, "projects")}>{t.nav.projects}</a>
+        {t.home.notesLine3}
+        <a href={getRelativeLocaleUrl(locale, "about")}>{t.nav.about}</a>。
+      </p>
+
+      <a class="garden-continuum" href={getRelativeLocaleUrl(locale, "posts")}>
+        {t.home.continuum}
+      </a>
+    </section>
   </main>
   <Footer />
 </Layout>
@@ -172,4 +241,8 @@ const rssBase = import.meta.env.BASE_URL.replace(/\/?$/, "/");
       sessionStorage.setItem("backUrl", indexLayout.homePath ?? baseRoot);
     }
   });
+</script>
+
+<script>
+  import "@/scripts/garden-atmosphere";
 </script>

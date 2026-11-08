@@ -47,6 +47,21 @@ export interface UIStrings {
     recentPosts: string;
     recentHint: string;
     allPosts: string;
+    mastheadMark: string;
+    mastheadGhost: string;
+    mastheadSub: string;
+    whisperIntro: string;
+    sectionNow: string;
+    sectionNowEpigraph: string;
+    sectionGarden: string;
+    sectionGardenEpigraph: string;
+    sectionNotes: string;
+    sectionNotesEpigraph: string;
+    notesLine1: string;
+    notesLine2: string;
+    notesLine3: string;
+    continuum: string;
+    folioRead: string;
   };
   footer: {
     tagline: string;
