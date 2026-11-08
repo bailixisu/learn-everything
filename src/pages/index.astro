@@ -61,7 +61,9 @@ const nowUrl = nowPost
     data-home-path={homePath}
     class="garden-canvas"
   >
-    <div class="garden-glow" aria-hidden="true"></div>
+    <div class="garden-glow" aria-hidden="true" data-glow-root>
+      <div class="garden-glow-orb"></div>
+    </div>
 
     <section
       class="garden-spread reveal-garden"
@@ -69,12 +71,12 @@ const nowUrl = nowPost
       style="--reveal-delay: 0ms"
       aria-labelledby="garden-masthead"
     >
-      <p class="garden-vertical garden-parallax" data-parallax="0.04">
+      <p class="garden-vertical">
         {t.home.mastheadMark}
       </p>
 
       <div class="garden-masthead" id="garden-masthead">
-        <span class="garden-masthead-ghost garden-parallax" data-parallax="0.06"
+        <span class="garden-masthead-ghost" aria-hidden="true"
           >{t.home.mastheadGhost}</span
         >
         <div class="garden-title-stack">
@@ -132,7 +134,7 @@ const nowUrl = nowPost
         <section
           class="garden-chapter reveal-garden"
           data-reveal="pending"
-          style="--reveal-delay: 120ms"
+          style="--reveal-delay: 60ms"
           aria-labelledby="chapter-now"
         >
           <header class="garden-chapter-head">
@@ -172,7 +174,7 @@ const nowUrl = nowPost
         <section
           class="garden-chapter reveal-garden"
           data-reveal="pending"
-          style="--reveal-delay: 200ms"
+          style="--reveal-delay: 80ms"
           aria-labelledby="chapter-garden"
         >
           <header class="garden-chapter-head">
@@ -203,7 +205,7 @@ const nowUrl = nowPost
     <section
       class="garden-chapter reveal-garden"
       data-reveal="pending"
-      style="--reveal-delay: 280ms"
+      style="--reveal-delay: 100ms"
       aria-labelledby="chapter-notes"
     >
       <header class="garden-chapter-head">

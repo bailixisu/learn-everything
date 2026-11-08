@@ -4,7 +4,6 @@ import { getRelativeLocaleUrl } from "astro:i18n";
 import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { getAssetPath } from "@/utils/withBase";
 import config from "@/config";
-import "katex/dist/katex.min.css";
 import "@/styles/global.css";
 
 type Props = {
@@ -116,7 +115,6 @@ const rssHref = getRelativeLocaleUrl(
     <slot />
     <script>
       import "@/scripts/theme";
-      import "@/scripts/reveal";
     </script>
   </body>
 </html>
