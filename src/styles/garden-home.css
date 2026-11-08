@@ -1,0 +1,504 @@
+/* Editorial garden homepage — asymmetric spread, not blog chrome */
+
+@theme inline {
+  --color-ink-veil: var(--ink-veil);
+  --color-garden-wash: var(--garden-wash);
+}
+
+:root,
+[data-theme="light"] {
+  --ink-veil: #1c211e14;
+  --garden-wash: #d4cfc31a;
+  --garden-rule: #1c211e22;
+}
+
+[data-theme="dark"] {
+  --ink-veil: #e4ebe80f;
+  --garden-wash: #6ec4b00c;
+  --garden-rule: #e4ebe818;
+}
+
+.garden-canvas {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin-inline: auto;
+  padding: 0 clamp(1.25rem, 4vw, 3.5rem) clamp(5rem, 12vh, 8rem);
+  overflow-x: clip;
+}
+
+.garden-canvas[data-garden-ready="true"] .garden-glow {
+  opacity: 1;
+}
+
+.garden-glow {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  background: radial-gradient(
+    42rem circle at var(--glow-x, 50%) var(--glow-y, 40%),
+    color-mix(in srgb, var(--accent) 14%, transparent),
+    transparent 62%
+  );
+  transition: opacity 1.8s ease;
+}
+
+.garden-spread {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2rem, 6vw, 4rem);
+  padding-block: clamp(2.5rem, 10vh, 6rem);
+  min-height: min(88vh, 52rem);
+  align-content: center;
+}
+
+@media (min-width: 48rem) {
+  .garden-spread {
+    grid-template-columns: 3.25rem minmax(0, 1.1fr) minmax(14rem, 0.65fr);
+    grid-template-rows: auto auto auto;
+    column-gap: clamp(1.5rem, 4vw, 3rem);
+    row-gap: 2.5rem;
+  }
+
+  .garden-vertical {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .garden-masthead {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .garden-lede {
+    grid-column: 2;
+    grid-row: 2;
+    padding-inline-start: clamp(1rem, 8vw, 4.5rem);
+  }
+
+  .garden-whisper-wrap {
+    grid-column: 3;
+    grid-row: 1 / span 3;
+    align-self: end;
+    padding-block-end: 0.5rem;
+  }
+
+  .garden-social {
+    grid-column: 2;
+    grid-row: 3;
+    padding-inline-start: clamp(1rem, 8vw, 4.5rem);
+  }
+}
+
+.garden-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  letter-spacing: 0.38em;
+  font-size: 0.72rem;
+  color: var(--color-muted-foreground);
+  margin-inline: auto;
+}
+
+.garden-masthead {
+  position: relative;
+  isolation: isolate;
+}
+
+.garden-masthead-ghost {
+  position: absolute;
+  z-index: -1;
+  left: -0.06em;
+  top: -0.35em;
+  font-size: clamp(4.5rem, 18vw, 11rem);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: var(--color-foreground);
+  opacity: 0.055;
+  transform: rotate(-7deg);
+  user-select: none;
+  white-space: nowrap;
+}
+
+.garden-title-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+}
+
+.garden-title-line {
+  display: block;
+  font-size: clamp(2.75rem, 10vw, 5.25rem);
+  font-weight: 650;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.garden-title-line--shift {
+  margin-inline-start: clamp(2rem, 12vw, 7rem);
+  color: color-mix(in srgb, var(--color-foreground) 82%, var(--color-accent));
+}
+
+.garden-hand {
+  margin-block-start: 1.25rem;
+  font-size: 0.92rem;
+  font-style: italic;
+  letter-spacing: 0.12em;
+  color: var(--color-muted-foreground);
+  transform: rotate(-2deg);
+  transform-origin: left center;
+}
+
+.garden-lede {
+  max-width: 32rem;
+}
+
+.garden-lede p:first-child {
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+}
+
+.garden-lede p + p {
+  margin-block-start: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--color-muted-foreground);
+}
+
+.garden-whisper-wrap {
+  border-inline-start: 1px solid var(--garden-rule);
+  padding-inline-start: 1.25rem;
+}
+
+.garden-whisper-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-muted-foreground);
+}
+
+.garden-whisper {
+  margin-block-start: 0.75rem;
+  font-size: 0.88rem;
+  line-height: 1.9;
+  color: var(--color-muted-foreground);
+}
+
+.garden-whisper a {
+  color: var(--color-foreground);
+  text-decoration: none;
+  border-bottom: 1px dashed
+    color-mix(in srgb, var(--color-accent) 45%, transparent);
+  transition:
+    color 0.4s ease,
+    border-color 0.4s ease;
+}
+
+.garden-whisper a:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.garden-social {
+  font-size: 0.85rem;
+  color: var(--color-muted-foreground);
+}
+
+.garden-rule {
+  margin-block: clamp(3rem, 8vw, 5rem);
+  border: 0;
+  border-block-start: 1px solid var(--garden-rule);
+}
+
+.garden-chapter {
+  position: relative;
+  z-index: 1;
+  margin-block-start: clamp(3.5rem, 10vw, 6.5rem);
+}
+
+.garden-chapter-head {
+  display: grid;
+  gap: 0.35rem;
+  margin-block-end: clamp(2rem, 5vw, 3rem);
+}
+
+@media (min-width: 40rem) {
+  .garden-chapter-head {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 2rem;
+    align-items: baseline;
+  }
+
+  .garden-chapter-index {
+    grid-row: 1 / span 2;
+  }
+
+  .garden-chapter-title {
+    grid-column: 2;
+  }
+
+  .garden-chapter-epigraph {
+    grid-column: 2;
+  }
+}
+
+.garden-chapter-index {
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1;
+  color: color-mix(in srgb, var(--color-accent) 55%, var(--color-foreground));
+  opacity: 0.85;
+}
+
+.garden-chapter-title {
+  font-size: clamp(1.75rem, 4vw, 2.35rem);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+.garden-chapter-epigraph {
+  font-size: 0.92rem;
+  font-style: italic;
+  color: var(--color-muted-foreground);
+}
+
+/* —— 此刻：大拉页 —— */
+.garden-now-spread {
+  position: relative;
+  padding: clamp(1.5rem, 4vw, 2.75rem) 0;
+}
+
+.garden-now-spread::before {
+  content: "";
+  position: absolute;
+  inset: 0 -8vw auto -4vw;
+  height: 70%;
+  background: linear-gradient(105deg, var(--garden-wash), transparent 68%);
+  z-index: -1;
+  transform: skewY(-1.5deg);
+}
+
+.garden-now-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.garden-now-title {
+  font-size: clamp(1.85rem, 5vw, 3rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  max-width: 22ch;
+  transition: color 0.5s ease;
+}
+
+.garden-now-link:hover .garden-now-title {
+  color: var(--color-accent);
+}
+
+.garden-now-desc {
+  margin-block-start: 1.25rem;
+  max-width: 36rem;
+  padding-inline-start: clamp(1.5rem, 6vw, 4rem);
+  border-inline-start: 2px solid
+    color-mix(in srgb, var(--color-accent) 35%, transparent);
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--color-muted-foreground);
+}
+
+.garden-now-meta {
+  margin-block-start: 1.5rem;
+  padding-inline-start: clamp(1.5rem, 6vw, 4rem);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: var(--color-muted-foreground);
+}
+
+/* —— 园中：非对称页码式目录 —— */
+.garden-folio {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.garden-folio-item {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 6rem) 1fr auto;
+  gap: clamp(0.75rem, 3vw, 2rem);
+  align-items: baseline;
+  padding-block: clamp(1.1rem, 2.5vw, 1.65rem);
+  border-block-end: 1px solid var(--garden-rule);
+}
+
+.garden-folio-item:first-child {
+  border-block-start: 1px solid var(--garden-rule);
+}
+
+@media (min-width: 40rem) {
+  .garden-folio-item:nth-child(even) .garden-folio-body {
+    padding-inline-start: clamp(0.5rem, 4vw, 3rem);
+  }
+
+  .garden-folio-item:nth-child(odd) {
+    grid-template-columns: minmax(5rem, 7rem) 1fr auto;
+  }
+}
+
+.garden-folio-date {
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--color-muted-foreground);
+  white-space: nowrap;
+}
+
+.garden-folio-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.garden-folio-title {
+  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+  font-weight: 500;
+  line-height: 1.45;
+  transition: color 0.45s ease;
+}
+
+.garden-folio-link:hover .garden-folio-title {
+  color: var(--color-accent);
+}
+
+.garden-folio-desc {
+  margin-block-start: 0.35rem;
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--color-muted-foreground);
+  max-width: 42rem;
+}
+
+.garden-folio-read {
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  color: var(--color-muted-foreground);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.garden-folio-item:hover .garden-folio-read,
+.garden-folio-link:focus-visible + .garden-folio-read,
+.garden-folio-item:focus-within .garden-folio-read {
+  opacity: 1;
+}
+
+/* —— 手记 —— */
+.garden-notes-prose {
+  max-width: 28rem;
+  margin-inline-start: clamp(0rem, 8vw, 5rem);
+  font-size: 1.02rem;
+  line-height: 2;
+  letter-spacing: 0.03em;
+}
+
+.garden-notes-prose a {
+  color: var(--color-foreground);
+  border-bottom: 1px dashed
+    color-mix(in srgb, var(--color-accent) 40%, transparent);
+  text-decoration: none;
+  transition: color 0.4s ease;
+}
+
+.garden-notes-prose a:hover {
+  color: var(--color-accent);
+}
+
+.garden-continuum {
+  display: inline-block;
+  margin-block-start: clamp(2.5rem, 6vw, 4rem);
+  margin-inline-start: clamp(0rem, 8vw, 5rem);
+  font-size: 0.9rem;
+  letter-spacing: 0.14em;
+  color: var(--color-muted-foreground);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition:
+    color 0.5s ease,
+    border-color 0.5s ease;
+}
+
+.garden-continuum:hover {
+  color: var(--color-accent);
+  border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
+}
+
+.garden-parallax {
+  will-change: transform;
+}
+
+/* Slow garden reveal */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-garden[data-reveal="pending"] {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal-garden[data-reveal="visible"] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .garden-masthead-ghost {
+    animation: garden-ghost-drift 28s ease-in-out infinite alternate;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-garden {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .garden-masthead-ghost {
+    animation: none !important;
+  }
+}
+
+@keyframes garden-ghost-drift {
+  from {
+    transform: rotate(-7deg) translate(0, 0);
+  }
+  to {
+    transform: rotate(-5deg) translate(0.5%, -1%);
+  }
+}
+
+/* Header on garden home */
+.site-header-bar--garden {
+  border-block-end-color: transparent;
+  background: color-mix(in srgb, var(--background) 72%, transparent);
+}
+
+.site-header-bar--garden .app-layout {
+  max-width: none;
+  padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+.site-header-bar--garden a[href]:not(.nav-link) span:first-child {
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}

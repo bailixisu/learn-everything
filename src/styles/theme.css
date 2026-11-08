@@ -16,12 +16,12 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Light theme — warm paper & sage */
+/* Light theme — warm paper & ink-green */
 :root,
 [data-theme="light"] {
-  --background: #f7f6f2;
-  --foreground: #1c211e;
-  --accent: #2d6a5a;
+  --background: #f3f0e8;
+  --foreground: #1a1d1b;
+  --accent: #3a5f52;
   --accent-foreground: #f7fbf9;
   --muted: #e6ebe8;
   --muted-foreground: #5c6963;
@@ -31,11 +31,11 @@
   --hero-glow: #3d8b7424;
 }
 
-/* Dark theme — forest night */
+/* Dark theme — night garden */
 [data-theme="dark"] {
-  --background: #121615;
-  --foreground: #e4ebe8;
-  --accent: #6ec4b0;
+  --background: #101311;
+  --foreground: #e8ebe6;
+  --accent: #7ab8a8;
   --accent-foreground: #0c1613;
   --muted: #252d2a;
   --muted-foreground: #9aa8a2;

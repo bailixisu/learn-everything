@@ -35,6 +35,12 @@ const isActive = (path: string) => {
 };
 
 const navLinkClass = "nav-link rounded-md px-2 py-1.5 font-medium";
+
+type Props = {
+  chrome?: "default" | "garden";
+};
+
+const { chrome = "default" } = Astro.props;
 ---
 
 <a
@@ -45,7 +51,12 @@ const navLinkClass = "nav-link rounded-md px-2 py-1.5 font-medium";
   {t.a11y.skipToContent}
 </a>
 
-<header class="site-header-bar">
+<header
+  class:list={[
+    "site-header-bar",
+    { "site-header-bar--garden": chrome === "garden" },
+  ]}
+>
   <div
     class="app-layout flex w-full items-baseline justify-between gap-4 py-3 sm:items-center sm:py-4"
   >

@@ -1,0 +1,45 @@
+---
+import type { CollectionEntry } from "astro:content";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import { getPostUrl } from "@/utils/getPostPaths";
+import { toTransitionName } from "@/utils/toTransitionName";
+import config from "@/config";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+type Props = {
+  heading?: "h2" | "h3";
+  readLabel: string;
+} & CollectionEntry<"posts">;
+
+const { heading: Heading = "h3", readLabel, id, data, filePath } = Astro.props;
+
+const { title, description, pubDatetime, modDatetime, timezone: postTz } = data;
+const postUrl = getPostUrl(id, filePath, Astro.currentLocale);
+
+const stamp = dayjs(
+  modDatetime && modDatetime > pubDatetime ? modDatetime : pubDatetime
+).tz(postTz ?? config.site.timezone);
+const dateLabel = stamp.format("YYYY.M.D");
+---
+
+<li class="garden-folio-item reveal-garden" data-reveal="pending">
+  <time class="garden-folio-date" datetime={stamp.toISOString()}>
+    {dateLabel}
+  </time>
+  <div class="garden-folio-body">
+    <a href={postUrl} class="garden-folio-link">
+      <Heading
+        transition:name={toTransitionName(id)}
+        class="garden-folio-title"
+      >
+        {title}
+      </Heading>
+      {description && <p class="garden-folio-desc">{description}</p>}
+    </a>
+  </div>
+  <span class="garden-folio-read" aria-hidden="true">{readLabel}</span>
+</li>
