@@ -3,7 +3,7 @@
 @layer base {
   /* ===== Override default Tailwind Typography styles ===== */
   .app-prose {
-    @apply prose min-w-0;
+    @apply prose prose-neutral dark:prose-invert min-w-0;
 
     h1,
     h2,

@@ -7,29 +7,40 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-hero-glow: var(--hero-glow);
   --font-app:
     "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  --font-display: var(--font-app);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Light theme values */
+/* Light theme — warm paper & sage */
 :root,
 [data-theme="light"] {
-  --background: #fbfaf7;
-  --foreground: #252722;
-  --accent: #357266;
-  --accent-foreground: #ffffff;
-  --muted: #e8ebe5;
-  --muted-foreground: #667069;
-  --border: #e4e3dc;
+  --background: #f7f6f2;
+  --foreground: #1c211e;
+  --accent: #2d6a5a;
+  --accent-foreground: #f7fbf9;
+  --muted: #e6ebe8;
+  --muted-foreground: #5c6963;
+  --border: #d8ddd9;
+  --surface: #ffffffcc;
+  --surface-elevated: #ffffff;
+  --hero-glow: #3d8b7424;
 }
 
-/* Dark theme values */
+/* Dark theme — forest night */
 [data-theme="dark"] {
-  --background: #171b19;
-  --foreground: #e8ece7;
-  --accent: #79b8a8;
-  --accent-foreground: #10211d;
-  --muted: #29332f;
-  --muted-foreground: #a8b3ad;
-  --border: #34443e;
+  --background: #121615;
+  --foreground: #e4ebe8;
+  --accent: #6ec4b0;
+  --accent-foreground: #0c1613;
+  --muted: #252d2a;
+  --muted-foreground: #9aa8a2;
+  --border: #333d39;
+  --surface: #1a211e99;
+  --surface-elevated: #1e2623;
+  --hero-glow: #6ec4b018;
 }

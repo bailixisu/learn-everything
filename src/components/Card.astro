@@ -6,26 +6,58 @@ import Datetime from "./Datetime.astro";
 
 type Props = {
   variant?: "h2" | "h3";
+  presentation?: "list" | "surface";
 } & CollectionEntry<"posts">;
 
-const { variant: Heading = "h2", id, data, filePath } = Astro.props;
+const {
+  variant: Heading = "h2",
+  presentation = "list",
+  id,
+  data,
+  filePath,
+} = Astro.props;
 
 const { title, description, ...props } = data;
+const postUrl = getPostUrl(id, filePath, Astro.currentLocale);
 ---
 
-<li class="my-6">
-  <a
-    href={getPostUrl(id, filePath, Astro.currentLocale)}
-    class:list={[
-      "text-accent inline-block text-lg font-medium",
-      "decoration-dashed underline-offset-4 hover:underline",
-      "focus-visible:no-underline focus-visible:underline-offset-0",
-    ]}
-  >
-    <Heading transition:name={toTransitionName(id)}>
-      {title}
-    </Heading>
-  </a>
-  <Datetime {...props} />
-  <p>{description}</p>
-</li>
+{
+  presentation === "surface" ? (
+    <li class="list-none">
+      <a
+        href={postUrl}
+        class="post-surface-card surface-card group block p-5 sm:p-6"
+      >
+        <Heading
+          transition:name={toTransitionName(id)}
+          class="text-foreground group-hover:text-accent text-lg leading-snug font-semibold tracking-tight transition-colors"
+        >
+          {title}
+        </Heading>
+        <div class="mt-2">
+          <Datetime {...props} />
+        </div>
+        {description && (
+          <p class="text-muted-foreground mt-3 line-clamp-2 text-sm leading-relaxed">
+            {description}
+          </p>
+        )}
+      </a>
+    </li>
+  ) : (
+    <li class="my-6">
+      <a
+        href={postUrl}
+        class:list={[
+          "text-accent inline-block text-lg font-medium",
+          "decoration-dashed underline-offset-4 hover:underline",
+          "focus-visible:no-underline focus-visible:underline-offset-0",
+        ]}
+      >
+        <Heading transition:name={toTransitionName(id)}>{title}</Heading>
+      </a>
+      <Datetime {...props} />
+      <p>{description}</p>
+    </li>
+  )
+}

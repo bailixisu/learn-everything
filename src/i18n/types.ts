@@ -2,6 +2,7 @@ export interface UIStrings {
   nav: {
     home: string;
     posts: string;
+    knowledge: string;
     tags: string;
     projects: string;
     about: string;
@@ -27,12 +28,28 @@ export interface UIStrings {
     page: string;
   };
   home: {
+    eyebrow: string;
+    lead: string;
+    aside: string;
     socialLinks: string;
+    exploreTitle: string;
+    exploreDesc: string;
+    hubPostsTitle: string;
+    hubPostsDesc: string;
+    hubTagsTitle: string;
+    hubTagsDesc: string;
+    hubProjectsTitle: string;
+    hubProjectsDesc: string;
+    hubAboutTitle: string;
+    hubAboutDesc: string;
     featured: string;
+    featuredHint: string;
     recentPosts: string;
+    recentHint: string;
     allPosts: string;
   };
   footer: {
+    tagline: string;
     copyright: string;
     allRightsReserved: string;
   };

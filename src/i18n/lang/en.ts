@@ -4,6 +4,7 @@ export default {
   nav: {
     home: "Home",
     posts: "Posts",
+    knowledge: "Topics",
     tags: "Tags",
     projects: "Projects",
     about: "About",
@@ -29,12 +30,29 @@ export default {
     page: "Page",
   },
   home: {
-    socialLinks: "Social Links",
+    eyebrow: "Learn · Build · Reflect",
+    lead: "A personal digital garden for notes, projects, and questions that keep unfolding.",
+    aside:
+      "Not aiming for perfect first drafts—just clearer thinking over time.",
+    socialLinks: "Find me",
+    exploreTitle: "Start here",
+    exploreDesc: "Pick a thread; the rest tends to connect.",
+    hubPostsTitle: "All posts",
+    hubPostsDesc: "Browse notes and write-ups in chronological order.",
+    hubTagsTitle: "Topics & tags",
+    hubTagsDesc: "Follow ideas by theme across the garden.",
+    hubProjectsTitle: "Projects",
+    hubProjectsDesc: "What I'm building, shipping, or revisiting.",
+    hubAboutTitle: "About",
+    hubAboutDesc: "Why this site exists and how I tend it.",
     featured: "Featured",
-    recentPosts: "Recent Posts",
-    allPosts: "All Posts",
+    featuredHint: "A good place to start",
+    recentPosts: "Recent",
+    recentHint: "Freshly tended",
+    allPosts: "View all posts",
   },
   footer: {
+    tagline: "Digital garden · notes, projects, ongoing reflection",
     copyright: "Copyright",
     allRightsReserved: "All rights reserved.",
   },
@@ -43,13 +61,13 @@ export default {
     tagDesc: "All the articles with the tag",
 
     tagsTitle: "Tags",
-    tagsDesc: "All the tags used in posts.",
+    tagsDesc: "Explore posts grouped by theme.",
 
     postsTitle: "Posts",
-    postsDesc: "All the articles I've posted.",
+    postsDesc: "Everything I've written about learning and building.",
 
     archivesTitle: "Archives",
-    archivesDesc: "All the articles I've archived.",
+    archivesDesc: "All articles in chronological order.",
 
     searchTitle: "Search",
     searchDesc: "Search any article ...",
@@ -66,7 +84,7 @@ export default {
   },
   notFound: {
     title: "404 Not Found",
-    message: "Page Not Found",
-    goHome: "Go back home",
+    message: "This path hasn't been planted yet.",
+    goHome: "Back to the garden gate",
   },
 } satisfies UIStrings;
