@@ -1,0 +1,28 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
+
+type Props = {
+  title: string;
+  description: string;
+} & HTMLAttributes<"a">;
+
+const { title, description, class: className, ...attrs } = Astro.props;
+---
+
+<a
+  class:list={[
+    "hub-tile surface-card group flex flex-col gap-2 p-5 sm:p-6",
+    className,
+  ]}
+  {...attrs}
+>
+  <div class="flex items-start justify-between gap-3">
+    <h3 class="text-lg font-semibold tracking-tight">{title}</h3>
+    <IconArrowRight
+      class="text-accent mt-0.5 size-5 shrink-0 opacity-60 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100 rtl:-rotate-180"
+      aria-hidden="true"
+    />
+  </div>
+  <p class="text-muted-foreground text-sm leading-relaxed">{description}</p>
+</a>

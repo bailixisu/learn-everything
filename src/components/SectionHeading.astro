@@ -1,0 +1,16 @@
+---
+type Props = {
+  title: string;
+  hint?: string;
+  as?: "h2" | "h3";
+};
+
+const { title, hint, as: Tag = "h2" } = Astro.props;
+---
+
+<div
+  class="mb-6 flex flex-col gap-1 sm:mb-8 sm:flex-row sm:items-end sm:justify-between"
+>
+  <Tag class="text-2xl font-semibold tracking-tight">{title}</Tag>
+  {hint && <p class="text-muted-foreground text-sm sm:pb-0.5">{hint}</p>}
+</div>
