@@ -6,6 +6,10 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @layer base {
+  body {
+    text-rendering: optimizeLegibility;
+  }
+
   * {
     @apply border-border outline-accent/75;
     scrollbar-width: auto;
@@ -133,26 +137,4 @@
       color-mix(in srgb, var(--accent) 12%, transparent),
       transparent 60%
     );
-}
-
-/* Scroll reveal (toggled by JS) */
-.reveal-section {
-  opacity: 1;
-  transform: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .reveal-section[data-reveal="pending"] {
-    opacity: 0;
-    transform: translateY(16px);
-    transition:
-      opacity 0.55s var(--ease-out-expo),
-      transform 0.55s var(--ease-out-expo);
-    transition-delay: var(--reveal-delay, 0ms);
-  }
-
-  .reveal-section[data-reveal="visible"] {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
